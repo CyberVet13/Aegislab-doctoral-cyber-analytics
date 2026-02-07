@@ -58,13 +58,15 @@ for i, item in enumerate(queue[:20]):
                         extra=extra if extra else None,
                     )
                     full_path.write_text(new_text, encoding="utf-8")
-                append_decision_log(
-                    datetime.utcnow().strftime("%Y-%m-%d"),
-                    "PI_Approval",
-                    f"\n- **Artifact:** {path}\n- **Action:** Approved\n",
-                )
-                st.session_state["review_queue"] = [q for q in queue if q.get("path") != path]
-                st.rerun()
+                    append_decision_log(
+                        datetime.utcnow().strftime("%Y-%m-%d"),
+                        "PI_Approval",
+                        f"\n- **Artifact:** {path}\n- **Action:** Approved\n",
+                    )
+                    st.session_state["review_queue"] = [q for q in queue if q.get("path") != path]
+                    st.rerun()
+                else:
+                    st.error("Artifact file not found. Cannot approve; remove from queue or fix path.")
         with col2:
             if st.button("Request changes", key=f"request_{i}_{path.replace('/', '_')}"):
                 append_decision_log(

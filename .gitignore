@@ -43,3 +43,6 @@ build/
 # Local only (keep repo clean)
 *.local
 .cursor/
+
+# Streamlit RAG index (ChromaDB; rebuild with "Build RAG index" in Run Agent)
+09_Operations/Streamlit_App/rag_index/

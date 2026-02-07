@@ -19,6 +19,7 @@ from aegislab_ui.model_gateway import ModelGateway
 from aegislab_ui.logging_audit import LoggingAudit
 from aegislab_ui.metadata import inject_frontmatter
 from aegislab_ui.safety import SafetyGuard
+from aegislab_ui.rag import RAG
 
 load_env()
 
@@ -50,6 +51,22 @@ output_path = st.text_input(
     "Output path (relative to repo, e.g. 02_Agents/02_Applied_Research_Methodologist/Outputs/artifact.md)",
     key="run_output_path",
 )
+
+with st.expander("RAG (optional — augment with repo docs)"):
+    rag = RAG()
+    rag_ready = rag.is_ready()
+    if rag_ready:
+        st.caption("Index ready. Check below to inject retrieved context into the prompt.")
+    else:
+        st.caption("Build the index once (requires OPENAI_API_KEY). Indexes 00_Governance, 02_Agents, 03_Research_Methods, 04_Praxis_Artifact, Session_Logs, Decision_Logs.")
+        if st.button("Build RAG index", key="run_build_rag"):
+            with st.spinner("Building index..."):
+                n, msg = rag.build_index()
+                st.info(f"{msg}")
+                st.rerun()
+    augment_rag = st.checkbox("Augment this run with retrieved context from repo docs", value=False, key="run_augment_rag")
+    if augment_rag and not rag_ready:
+        st.warning("Build the RAG index first (click above) to use augmentation.")
 
 if safety.defensive_scope_confirmation_required(research_objective or ""):
     st.warning(safety.get_defensive_scope_warning())
@@ -93,6 +110,16 @@ if run_clicked:
 **Citations required:** {citations_required}
 
 **Task:** Execute the {template_type} template for this context. Output in markdown suitable for the given output path."""
+            rag_block = ""
+            if augment_rag:
+                try:
+                    rag = RAG()
+                    if rag.is_ready():
+                        rag_block = rag.get_context_block(research_objective or "", k=5)
+                except Exception:
+                    pass
+            if rag_block:
+                user_content = rag_block + "\n\n---\n\n" + user_content
             messages = [
                 {"role": "user", "content": template_body + "\n\n---\n\n" + user_content},
             ]
@@ -110,39 +137,41 @@ if run_clicked:
                 st.exception(e)
                 content = ""
             if content:
-                session_id = str(uuid.uuid4())[:8]
-                from datetime import datetime
-                date = datetime.utcnow().strftime("%Y-%m-%d")
-                body_with_meta = inject_frontmatter(
-                    content,
-                    session_date=date,
-                    model_used=model_choice,
-                    prompt_summary=prompt_summary,
-                    output_path=output_path,
-                    pi_review_status="Draft",
-                )
-                validator.ensure_output_dir(output_path)
-                out_full = get_path(output_path)
-                out_full.write_text(body_with_meta, encoding="utf-8")
-                LoggingAudit.run(
-                    session_id=session_id,
-                    agent_num=agent_num,
-                    model_used=model_choice,
-                    template_type=template_type,
-                    prompt_summary=prompt_summary,
-                    output_path=output_path,
-                    prompt_payload=payload,
-                    model_output_text=content,
-                    artifact_name=out_full.stem,
-                )
-                if "review_queue" not in st.session_state:
-                    st.session_state["review_queue"] = []
-                st.session_state["review_queue"].append({
-                    "path": output_path,
-                    "agent": agent_num,
-                    "model": model_choice,
-                    "date": date,
-                    "preview": content[:500],
-                })
-                st.success(f"Run complete. Output written to `{output_path}`. Session logged. Draft added to Review Queue.")
-                st.expander("Model output preview").markdown(content[:2000] + ("..." if len(content) > 2000 else ""))
+                if not validator.ensure_output_dir(output_path):
+                    st.error("Output path is invalid or outside the repository. Choose a path under the repo (e.g. 02_Agents/02_Applied_Research_Methodologist/Outputs/artifact.md).")
+                else:
+                    session_id = str(uuid.uuid4())[:8]
+                    from datetime import datetime
+                    date = datetime.utcnow().strftime("%Y-%m-%d")
+                    body_with_meta = inject_frontmatter(
+                        content,
+                        session_date=date,
+                        model_used=model_choice,
+                        prompt_summary=prompt_summary,
+                        output_path=output_path,
+                        pi_review_status="Draft",
+                    )
+                    out_full = get_path(output_path)
+                    out_full.write_text(body_with_meta, encoding="utf-8")
+                    LoggingAudit.run(
+                        session_id=session_id,
+                        agent_num=agent_num,
+                        model_used=model_choice,
+                        template_type=template_type,
+                        prompt_summary=prompt_summary,
+                        output_path=output_path,
+                        prompt_payload=payload,
+                        model_output_text=content,
+                        artifact_name=out_full.stem,
+                    )
+                    if "review_queue" not in st.session_state:
+                        st.session_state["review_queue"] = []
+                    st.session_state["review_queue"].append({
+                        "path": output_path,
+                        "agent": agent_num,
+                        "model": model_choice,
+                        "date": date,
+                        "preview": content[:500],
+                    })
+                    st.success(f"Run complete. Output written to `{output_path}`. Session logged. Draft added to Review Queue.")
+                    st.expander("Model output preview").markdown(content[:2000] + ("..." if len(content) > 2000 else ""))

@@ -14,7 +14,7 @@
 ## Features
 
 - **Dashboard:** Repository health, last 10 sessions, pending reviews count.
-- **Run Agent:** Agent 1–11, template type (Daily Driver / Deep Dive / Review-QA), model auto-route or manual override with rationale logging, session log + authorship log + draft to review queue.
+- **Run Agent:** Agent 1–11, template type (Daily Driver / Deep Dive / Review-QA), model auto-route or manual override with rationale logging, session log + authorship log + draft to review queue. Optional **RAG**: augment prompts with retrieved context from repo docs (governance, agents, methodology, praxis, session/decision logs); build index once from Run Agent page.
 - **Review Queue:** List drafts, view content, PI actions: Approve / Request changes / Archive (decision log entries).
 - **Governance Audit:** Filterable session logs (date, agent, model, hashes), diff-friendly view, optional committee packet ZIP export.
 - **Settings / Routing:** Display routing rules, per-agent defaults, append routing notes to Decision_Log.
@@ -27,11 +27,17 @@
 - No auto-approval; PI must Approve / Request changes / Archive from Review Queue.
 - Safety: defensive-scope confirmation when topic may involve offensive security; no writes outside repo.
 
+## RAG (single index)
+
+- One retrieval-augmented index over repo markdown: `00_Governance`, `02_Agents`, `03_Research_Methods`, `04_Praxis_Artifact`, `09_Operations/Session_Logs`, `09_Operations/Decision_Logs`.
+- **Build:** On Run Agent page, open "RAG (optional)" and click **Build RAG index** (requires `OPENAI_API_KEY`; uses OpenAI `text-embedding-3-small` via ChromaDB). Index is stored under `09_Operations/Streamlit_App/rag_index/` (gitignored).
+- **Use:** Check "Augment this run with retrieved context from repo docs" before running; the prompt is augmented with top-k retrieved chunks. No second RAG needed for the current setup.
+
 ## Structure
 
 - `app.py` — main shell.
 - `pages/` — 1_Dashboard, 2_Run_Agent, 3_Review_Queue, 4_Governance_Audit, 5_Settings_Routing.
-- `aegislab_ui/` — config, repo_validator, model_gateway, router, logging_audit, metadata, safety, templates_loader.
+- `aegislab_ui/` — config, repo_validator, model_gateway, router, logging_audit, metadata, safety, templates_loader, **rag**.
 
 ## Hardening & defense readiness
 

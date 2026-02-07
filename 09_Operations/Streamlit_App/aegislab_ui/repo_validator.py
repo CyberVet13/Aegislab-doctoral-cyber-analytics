@@ -69,6 +69,9 @@ class RepoValidator:
         """Ensure parent directory exists for rel_path under root. Return True if safe and done."""
         if not self.allowed_output_path(rel_path):
             return False
-        full = get_path(rel_path)
-        full.parent.mkdir(parents=True, exist_ok=True)
-        return True
+        try:
+            full = get_path(rel_path)
+            full.parent.mkdir(parents=True, exist_ok=True)
+            return True
+        except OSError:
+            return False
