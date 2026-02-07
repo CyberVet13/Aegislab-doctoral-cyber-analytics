@@ -20,6 +20,8 @@ REQUIRED_DIRS = [
     "07_Writing",
     "08_Defense",
     "09_Operations",
+    "10_Input",
+    "11_Results",
 ]
 
 REQUIRED_FILES = [

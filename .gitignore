@@ -46,3 +46,6 @@ build/
 
 # Streamlit RAG index (ChromaDB; rebuild with "Build RAG index" in Run Agent)
 09_Operations/Streamlit_App/rag_index/
+
+# Gradio workflow manager (local queue state)
+09_Operations/Gradio_App/review_queue.json

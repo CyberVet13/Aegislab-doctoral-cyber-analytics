@@ -13,10 +13,16 @@
 - [ ] `.env` at repo root with `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` (optional: `AEGISLAB_ROOT`)
 - [ ] Run from `09_Operations/Streamlit_App/`: `streamlit run app.py`
 
+### Workflow trigger (10_Input)
+
+- [ ] **Place** a brief or prompt in `10_Input/` (`.md`, `.txt`, or `.json`) — this kicks off the process
+- [ ] On **Run Agent** page: under **Load context from 10_Input**, select the file and click **Load into context**
+- [ ] Context field is filled; then select agent, template, output path, and run
+
 ### Run Agent
 
 - [ ] Select Agent (1–11) and template type (Daily Driver / Deep Dive / Review-QA)
-- [ ] Fill research objective, assumptions, constraints; set output path (within repo only)
+- [ ] Fill research objective (or load from 10_Input), assumptions, constraints; set output path (within repo only)
 - [ ] Defensive-scope confirmation if topic may involve offensive security
 - [ ] Model: Auto-route or manual override (override requires rationale → Decision_Log)
 - [ ] Run → session log written, hashes stored, artifact with front-matter, draft added to Review Queue

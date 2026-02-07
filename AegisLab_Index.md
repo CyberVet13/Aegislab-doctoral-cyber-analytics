@@ -79,6 +79,15 @@
 
 ---
 
+## Input and Results (10_Input, 11_Results)
+
+| Folder | Purpose |
+|--------|---------|
+| [10_Input/README.md](10_Input/README.md) | Workflow staging — information to start agent runs (prompts, briefs, context) |
+| [11_Results/README.md](11_Results/README.md) | Deliverables (complete) — PI-approved outputs for committee or submission |
+
+---
+
 ## Operations (09_Operations)
 
 | Document | Purpose |
@@ -87,10 +96,14 @@
 | [FIRST_RUN.md](09_Operations/FIRST_RUN.md) | First agent session walkthrough |
 | [GETTING_STARTED_GIT.md](09_Operations/GETTING_STARTED_GIT.md) | Git init and GitHub push |
 | [Tool_Configurations/README.md](09_Operations/Tool_Configurations/README.md) | Cursor and GitHub configuration |
+| [Streamlit_App/README.md](09_Operations/Streamlit_App/README.md) | Operational console (Dashboard, Run Agent, Review Queue, Audit) — http://localhost:8501 |
+| [Gradio_App/README.md](09_Operations/Gradio_App/README.md) | Workflow manager (Gradio) — http://127.0.0.1:7860 |
+| [n8n_Workflows/README.md](09_Operations/n8n_Workflows/README.md) | n8n automation (CLI + Workflow API) |
+| [Workflow_API/README.md](09_Operations/Workflow_API/README.md) | HTTP API for n8n (POST /run-agent) |
 | [Status_Report_2025-02-06.md](02_Agents/01_PI_Orchestrator/Outputs/Status_Report_2025-02-06.md) | Current status and upcoming tasks |
 | [Decision_Logs/](09_Operations/Decision_Logs/) | PI decisions (design, threat model, etc.) |
 | [Session_Logs/](09_Operations/Session_Logs/) | Agent session logs |
 
 ---
 
-**Last Updated:** 2025-02-06
+**Last Updated:** 2025-02-07

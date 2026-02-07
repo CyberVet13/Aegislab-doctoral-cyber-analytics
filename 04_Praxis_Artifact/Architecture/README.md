@@ -5,6 +5,7 @@ Store system architecture, threat model, adversary profiles, Zero Trust design, 
 
 ## Suggested Contents
 - `System_Architecture_v[X].md`
+- **`Environment_Architecture_View.md`** — AegisLab research environment (repo, Streamlit console, agents, LLM gateway, governance, RAG)
 - `Threat_Model_v[X].md`
 - `Adversary_Profiles.md`
 - `Zero_Trust_Design.md`
@@ -12,4 +13,4 @@ Store system architecture, threat model, adversary profiles, Zero Trust design, 
 - `Cryptographic_Design.md`
 - `Component_Diagrams/` (diagrams and figures)
 
-**Last Updated:** [YYYY-MM-DD]
+**Last Updated:** 2025-02-07

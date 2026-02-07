@@ -4,12 +4,49 @@
 - **Location:** `09_Operations/Streamlit_App/`
 - **Integration:** Uses existing `02_Agents/*/Prompt_Templates.md`, `09_Operations/Session_Logs/`, `00_Governance/`; does not replace any existing structure.
 
-## Quick start
+---
+
+## How to access the Streamlit app
+
+1. **Open a terminal** in the repo (e.g. PowerShell or Command Prompt).
+2. **Go to the app folder:**
+   ```bash
+   cd "09_Operations\Streamlit_App"
+   ```
+   Or in OneDrive path:
+   ```bash
+   cd "C:\Users\kelvi\OneDrive - cybervetssolutions.com\AegisLab\09_Operations\Streamlit_App"
+   ```
+3. **Install dependencies (first time only):**
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. **Set API keys (first time only):**  
+   Create a `.env` at the **repo root** (`AegisLab`), or set in your shell:
+   - `OPENAI_API_KEY` — for Run Agent (and RAG)
+   - `ANTHROPIC_API_KEY` — for Run Agent  
+   Or copy `.env.example` from `09_Operations/Streamlit_App/` to repo root and fill in the keys.
+5. **Start the app:**  
+   - **Option A:** Double-click **`Launch_Streamlit_UI.bat`** (Windows).  
+   - **Option B:** In the terminal (from step 2), run:
+     ```bash
+     streamlit run app.py
+     ```
+6. **Open in browser:**  
+   Go to **http://localhost:8501**  
+   (Streamlit may open it automatically; if not, paste that URL into Chrome, Edge, or Firefox.)
+
+**To stop:** In the terminal where the app is running, press **Ctrl+C**, or close the terminal window.
+
+---
+
+## Quick start (summary)
 
 - **Prerequisites:** Python 3.10+, API keys for OpenAI and Anthropic.
 - **Install:** From `09_Operations/Streamlit_App/` run `pip install -r requirements.txt`.
 - **Configure:** Copy `.env.example` to repo root as `.env` (or set `AEGISLAB_ROOT`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`).
 - **Run:** From `09_Operations/Streamlit_App/` run `streamlit run app.py`, or double-click **Launch_Streamlit_UI.bat** (Windows).
+- **Access:** **http://localhost:8501**
 
 ## Features
 
@@ -38,6 +75,10 @@
 - `app.py` — main shell.
 - `pages/` — 1_Dashboard, 2_Run_Agent, 3_Review_Queue, 4_Governance_Audit, 5_Settings_Routing.
 - `aegislab_ui/` — config, repo_validator, model_gateway, router, logging_audit, metadata, safety, templates_loader, **rag**.
+
+## UI improvements
+
+- **Ideas & roadmap:** [09_Operations/Tool_Configurations/Streamlit_UI_Improvements.md](../Tool_Configurations/Streamlit_UI_Improvements.md) — what’s done and what’s next (metric cards, grouped Run Agent, Review Queue labels, tips, persistence, etc.).
 
 ## Hardening & defense readiness
 

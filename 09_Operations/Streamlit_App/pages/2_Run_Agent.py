@@ -11,7 +11,7 @@ sys_path = str(Path(__file__).resolve().parent.parent)
 if sys_path not in __import__("sys").path:
     __import__("sys").path.insert(0, sys_path)
 
-from aegislab_ui.config import load_env, get_path, AGENT_NAMES, TEMPLATE_TYPES, MODEL_IDS
+from aegislab_ui.config import load_env, get_path, AGENT_NAMES, TEMPLATE_TYPES, MODEL_IDS, INPUT_DIR
 from aegislab_ui.repo_validator import RepoValidator
 from aegislab_ui.templates_loader import TemplatesLoader
 from aegislab_ui.router import Router
@@ -20,11 +20,12 @@ from aegislab_ui.logging_audit import LoggingAudit
 from aegislab_ui.metadata import inject_frontmatter
 from aegislab_ui.safety import SafetyGuard
 from aegislab_ui.rag import RAG
+from aegislab_ui.review_queue import save_review_queue
 
 load_env()
 
 st.title("Run Agent")
-st.markdown("Select agent, template, and model; provide context. Output is logged and queued for PI review.")
+st.caption("Select agent, template, and model; provide context. Output is logged and queued for PI review.")
 
 validator = RepoValidator()
 loader = TemplatesLoader()
@@ -32,6 +33,31 @@ router = Router()
 gateway = ModelGateway()
 safety = SafetyGuard()
 
+# --- Start from Input (10_Input) — kick off workflow ---
+input_dir = get_path(INPUT_DIR)
+input_files = []
+if input_dir.exists():
+    input_files = sorted([f for f in input_dir.iterdir() if f.is_file() and f.suffix.lower() in (".md", ".txt", ".json")], key=lambda p: p.stat().st_mtime, reverse=True)
+if input_files:
+    st.caption("**Workflow trigger:** Content in `10_Input/` starts the process. Load a file below to fill context, then run the agent.")
+    input_options = ["(none — type context manually)"] + [f.name for f in input_files]
+    input_choice = st.selectbox("Load context from 10_Input", options=input_options, key="run_input_file")
+    if input_choice and input_choice != "(none — type context manually)":
+        if st.button("Load into context", key="run_load_input"):
+            fp = input_dir / input_choice
+            if fp.exists():
+                try:
+                    content = fp.read_text(encoding="utf-8", errors="replace")
+                    st.session_state["run_objective"] = content
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Could not read file: {e}")
+else:
+    st.caption("Place prompts or briefs in **10_Input/** to start the workflow; they will appear here to load into context.")
+st.markdown("---")
+
+# --- Context ---
+st.subheader("Context")
 agent_options = loader.available_agents()
 agent_num = st.selectbox(
     "Agent",
@@ -41,15 +67,22 @@ agent_num = st.selectbox(
 )
 template_type = st.selectbox("Template type", options=TEMPLATE_TYPES, key="run_template_type")
 template_body = loader.get_template(agent_num, template_type)
-st.expander("Template preview").markdown(template_body or "*No template content*")
+with st.expander("Template preview", expanded=False):
+    st.markdown(template_body or "*No template content*")
 
-research_objective = st.text_area("Research objective / context", height=100, key="run_objective")
-assumptions = st.text_input("Assumptions (optional)", key="run_assumptions")
-constraints = st.text_input("Constraints (optional)", key="run_constraints")
+research_objective = st.text_area("Research objective / context", height=100, key="run_objective", placeholder="Describe the task and what the agent should produce.")
+assumptions = st.text_input("Assumptions (optional)", key="run_assumptions", placeholder="e.g. Data is already normalized")
+constraints = st.text_input("Constraints (optional)", key="run_constraints", placeholder="e.g. Max 2 pages")
 citations_required = st.checkbox("Citations required", value=False, key="run_citations")
+
+# --- Output ---
+st.subheader("Output path")
+output_placeholder = "e.g. 02_Agents/02_Applied_Research_Methodologist/Outputs/artifact.md or 11_Results/artifact.md"
 output_path = st.text_input(
-    "Output path (relative to repo, e.g. 02_Agents/02_Applied_Research_Methodologist/Outputs/artifact.md)",
+    "Path (relative to repo)",
     key="run_output_path",
+    placeholder=output_placeholder,
+    help="File will be created under AEGISLAB_ROOT. Use 02_Agents/.../Outputs/, 04_Praxis_Artifact/..., or 11_Results/ for completed deliverables.",
 )
 
 with st.expander("RAG (optional — augment with repo docs)"):
@@ -74,11 +107,14 @@ if safety.defensive_scope_confirmation_required(research_objective or ""):
 else:
     defensive_confirmed = True
 
-use_auto_route = st.radio("Model", ["Auto-route (recommended)", "Manual override"], key="run_model_choice")
+# --- Model ---
+st.subheader("Model")
 recommended = router.get_recommended_model(agent_num, template_type)
+st.caption(f"Recommended for this agent/template: **{recommended}** (auto-route uses this).")
+use_auto_route = st.radio("Model choice", ["Auto-route (recommended)", "Manual override"], key="run_model_choice", horizontal=True)
 if use_auto_route == "Manual override":
-    model_choice = st.selectbox("Model", list(MODEL_IDS.keys()), key="run_model_override")
-    rationale = st.text_area("Rationale for override (required)", key="run_rationale")
+    model_choice = st.selectbox("Override model", list(MODEL_IDS.keys()), key="run_model_override")
+    rationale = st.text_area("Rationale for override (required; logged to Decision_Log)", key="run_rationale", placeholder="e.g. Need longer context for this task")
 else:
     model_choice = recommended
     rationale = ""
@@ -173,5 +209,6 @@ if run_clicked:
                         "date": date,
                         "preview": content[:500],
                     })
+                    save_review_queue(st.session_state["review_queue"])
                     st.success(f"Run complete. Output written to `{output_path}`. Session logged. Draft added to Review Queue.")
                     st.expander("Model output preview").markdown(content[:2000] + ("..." if len(content) > 2000 else ""))

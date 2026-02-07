@@ -23,7 +23,7 @@ from aegislab_ui.logging_audit import append_decision_log
 load_env()
 
 st.title("Settings / Routing")
-st.markdown("Current routing rules and model defaults. Override rationale is always logged to Decision_Logs.")
+st.caption("Routing rules and model defaults. Override rationale is logged to Decision_Logs.")
 
 st.subheader("Default by template type")
 for tt in TEMPLATE_TYPES:

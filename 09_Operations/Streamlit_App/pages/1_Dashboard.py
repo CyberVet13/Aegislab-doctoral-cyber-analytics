@@ -4,7 +4,7 @@ Dashboard — repository health, missing files, last 10 sessions, pending review
 
 import streamlit as st
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime
 
 sys_path = str(Path(__file__).resolve().parent.parent)
 if sys_path not in __import__("sys").path:
@@ -16,36 +16,49 @@ from aegislab_ui.repo_validator import RepoValidator
 load_env()
 
 st.title("Dashboard")
-st.markdown("Repository health, recent sessions, and pending PI reviews.")
+st.caption("Repository health, recent sessions, and pending PI reviews.")
 
 validator = RepoValidator()
 ok, missing = validator.validate_structure()
 
+# Metric cards
+logs_dir = get_path(SESSION_LOGS_DIR)
+session_files = []
+if logs_dir.exists():
+    session_files = [f for f in logs_dir.glob("*.md") if f.name != "README.md"]
+queue = st.session_state.get("review_queue", [])
+queue_count = len(queue)
+
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.metric("Session logs", len(session_files))
+with col2:
+    st.metric("Pending reviews", queue_count)
+with col3:
+    status = "Valid" if ok else "Issues"
+    st.metric("Repo structure", status)
+
 if ok:
-    st.success("✅ Repository structure valid — required dirs and key files present.")
+    st.success("Repository structure valid — required dirs and key files present.")
 else:
-    st.error("❌ Repository structure issues:")
+    st.error("Repository structure issues:")
     for m in missing:
         st.markdown(f"- {m}")
 
 st.subheader("Last 10 sessions")
-logs_dir = get_path(SESSION_LOGS_DIR)
 if not logs_dir.exists():
     st.warning("No session logs directory yet.")
 else:
-    files = sorted(logs_dir.glob("*.md"), key=lambda p: p.stat().st_mtime, reverse=True)
-    files = [f for f in files if f.name != "README.md"][:10]
+    files = sorted(session_files, key=lambda p: p.stat().st_mtime, reverse=True)[:10]
     if not files:
-        st.info("No session logs yet. Run an agent from **Run Agent** to create logs.")
+        st.info("No session logs yet. Use **Run Agent** to create logs.")
     else:
         for f in files:
             mtime = datetime.fromtimestamp(f.stat().st_mtime)
             st.markdown(f"- `{f.name}` — {mtime.strftime('%Y-%m-%d %H:%M')}")
 
 st.subheader("Pending reviews")
-queue = st.session_state.get("review_queue", [])
-count = len(queue)
-if count == 0:
+if queue_count == 0:
     st.info("No drafts in review queue. Approved/archived artifacts are removed from queue.")
 else:
-    st.warning(f"**{count}** draft(s) awaiting PI action. Open **Review Queue** to approve or request changes.")
+    st.warning(f"**{queue_count}** draft(s) awaiting PI action. Open **Review Queue** to approve or request changes.")

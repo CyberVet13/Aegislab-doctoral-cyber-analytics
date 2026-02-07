@@ -14,6 +14,7 @@ if _app_dir not in sys.path:
     sys.path.insert(0, _app_dir)
 
 from aegislab_ui.config import load_env, get_root, AGENT_NAMES
+from aegislab_ui.review_queue import load_review_queue
 
 load_env()
 
@@ -28,20 +29,19 @@ st.title("🛡️ AegisLab — Operational Console")
 st.caption("Doctoral research environment • Committee-defensible • Full audit trail")
 
 st.sidebar.markdown("### Navigation")
-st.sidebar.markdown("- **Dashboard** — Repository health, pending reviews")
-st.sidebar.markdown("- **Run Agent** — Execute agent session with governance")
-st.sidebar.markdown("- **Review Queue** — PI approval / Request changes / Archive")
-st.sidebar.markdown("- **Governance Audit** — Session logs, hashes, export")
-st.sidebar.markdown("- **Settings / Routing** — Model defaults, rationale logging")
-
-root = get_root()
+st.sidebar.markdown("Use the page list below. Dashboard = health & metrics; Run Agent = execute; Review Queue = PI actions.")
 st.sidebar.markdown("---")
-st.sidebar.markdown(f"**AEGISLAB_ROOT**")
+root = get_root()
+st.sidebar.markdown("**AEGISLAB_ROOT**")
 st.sidebar.code(str(root), language=None)
+with st.sidebar.expander("Tips"):
+    st.markdown("- **Auto-route** unless you need an override (overrides are logged).")
+    st.markdown("- Build **RAG** once after repo changes; use *Augment* when helpful.")
+    st.markdown("- **Review Queue** is persisted (shared with Gradio and CLI).")
 
-# Initialize session state for review queue (drafts pending PI action)
+# Initialize session state for review queue (load from shared file so Streamlit + Gradio share one queue)
 if "review_queue" not in st.session_state:
-    st.session_state["review_queue"] = []
+    st.session_state["review_queue"] = load_review_queue()
 
 st.info(
     "Use the sidebar or **Dashboard** to start. Every agent run is logged; "

@@ -38,8 +38,10 @@ AGENTS_DIR = "02_Agents"
 GOVERNANCE_DIR = "00_Governance"
 SESSION_LOGS_DIR = "09_Operations/Session_Logs"
 DECISION_LOGS_DIR = "09_Operations/Decision_Logs"
+INPUT_DIR = "10_Input"
 AUTHORSHIP_LOG_PATH = "00_Governance/Authorship_Log.md"
 CHANGE_LOG_PATH = "00_Governance/Change_Log.md"
+REVIEW_QUEUE_PATH = "09_Operations/Gradio_App/review_queue.json"
 
 TEMPLATE_TYPES = ["Daily Driver", "Deep Dive", "Review/QA"]
 MODEL_IDS = {

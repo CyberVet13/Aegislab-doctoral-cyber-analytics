@@ -17,7 +17,7 @@ from aegislab_ui.config import load_env, get_path, SESSION_LOGS_DIR, DECISION_LO
 load_env()
 
 st.title("Governance Audit")
-st.markdown("Session logs and decision logs; filterable table and optional committee packet export.")
+st.caption("Session logs and decision logs; filter by date/agent; export committee packet ZIP.")
 
 logs_dir = get_path(SESSION_LOGS_DIR)
 decision_dir = get_path(DECISION_LOGS_DIR)
