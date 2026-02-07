@@ -6,9 +6,13 @@ textColor = "#1E3A5F"
 font = "sans serif"
 
 [server]
+# Bind to localhost only — not reachable from network or internet
+address = "127.0.0.1"
+port = 8501
 headless = true
 enableCORS = false
 enableXsrfProtection = true
+enableWebsocketCompression = true
 
 [browser]
 gatherUsageStats = false

@@ -38,6 +38,12 @@
 - **Plan:** [STREAMLIT_HARDENING_PLAN.md](STREAMLIT_HARDENING_PLAN.md) — security, reproducibility, AI disclosure, deployment, testing, and documentation checklist for committee and publication readiness.
 - Use the plan to prioritize validation, auth (if required), hashing, governance alignment, and tests.
 
+## Security (local use)
+
+- **Binding:** The app is configured to listen only on **127.0.0.1** (localhost). Only **http://localhost:8501** will work; the "Network URL" and "External URL" shown at startup will not be reachable from other devices or the internet.
+- **To confirm:** After starting the app, you should see only `Local URL: http://localhost:8501` as the usable address. Access the UI from the same machine only.
+- **If you need network access:** Change `address` in `.streamlit/config.toml` (e.g. to `"0.0.0.0"`) only on a trusted network, and use a reverse proxy with authentication (see STREAMLIT_HARDENING_PLAN.md).
+
 ## Tests
 
 - Run from repo root or Streamlit_App: `pytest tests/ -v`

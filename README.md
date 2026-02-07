@@ -12,6 +12,7 @@ AegisLab is a rigorous, auditable, and committee-defensible virtual research lab
 - **Document index:** [AegisLab_Index.md](AegisLab_Index.md) — Key deliverables and where to find them (governance, methodology, artifact, defense, operations).
 - **Proposal readiness:** [08_Defense/Proposal_Defense/Proposal_Readiness_Checklist.md](08_Defense/Proposal_Defense/Proposal_Readiness_Checklist.md). **Committee:** [Research_Summary_One_Pager](08_Defense/Proposal_Defense/Research_Summary_One_Pager.md), [Submission_Package_Checklist](08_Defense/Proposal_Defense/Submission_Package_Checklist.md).
 - **First run:** [09_Operations/FIRST_RUN.md](09_Operations/FIRST_RUN.md). **Git:** [09_Operations/GETTING_STARTED_GIT.md](09_Operations/GETTING_STARTED_GIT.md) and [09_Operations/READY_FOR_GIT.md](09_Operations/READY_FOR_GIT.md).
+- **Operational console (Streamlit UI):** [09_Operations/Streamlit_App/README.md](09_Operations/Streamlit_App/README.md) — run agents, review queue, governance audit. Run from `09_Operations/Streamlit_App/` via `streamlit run app.py` or **Launch_Streamlit_UI.bat**; open **http://localhost:8501**.
 
 ---
 
@@ -71,6 +72,7 @@ Each agent has a **Role_Charter.md**, **Prompt_Templates.md** (Daily Driver, Dee
 5. **Logging:** After each session, log in `09_Operations/Session_Logs/` and add the reproducibility block to any new output file. Update `00_Governance/Authorship_Log.md` for committee-facing artifacts.
 6. **Git and GitHub:** Connect the repo and push the scaffold using `09_Operations/GETTING_STARTED_GIT.md`. Use the included `.gitignore` as needed.
 7. **Tools:** See `09_Operations/Tool_Configurations/` for Cursor and GitHub setup.
+8. **Streamlit UI (optional):** From `09_Operations/Streamlit_App/`, run `pip install -r requirements.txt`, set `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` (e.g. in a `.env` at repo root), then run `streamlit run app.py` or double-click **Launch_Streamlit_UI.bat**. Open **http://localhost:8501** for Dashboard, Run Agent, Review Queue, and Governance Audit.
 
 ---
 
