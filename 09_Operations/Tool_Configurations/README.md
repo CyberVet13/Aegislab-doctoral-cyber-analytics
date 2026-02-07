@@ -13,6 +13,7 @@ This directory holds configuration documentation and examples for tools used in 
 | **Cursor Agent Context** | How to invoke agents (which file to open, which prompt template) | This README + 02_Agents/*/Prompt_Templates.md |
 | **GitHub Workflows** | CI/linting, branch protection, release tagging (if used) | `.github/workflows/` (see below) |
 | **Session Logging** | How to log sessions (manual or script) | 09_Operations/Session_Logs/ + this README |
+| **Streamlit UI** | Operational console, workflow, hardening | 09_Operations/Streamlit_App/ + Streamlit_UI_Workflow.md |
 
 ---
 
@@ -89,5 +90,13 @@ If using `.cursor/rules/` or a single project rule file, include:
 
 ---
 
-**Last Updated:** 2025-02-06  
+## Streamlit operational console
+
+- **App:** `09_Operations/Streamlit_App/` — Run Agent, Review Queue, Governance Audit, Settings/Routing.
+- **Workflow:** See [Streamlit_UI_Workflow.md](Streamlit_UI_Workflow.md).
+- **Hardening:** See [Streamlit_App/STREAMLIT_HARDENING_PLAN.md](../Streamlit_App/STREAMLIT_HARDENING_PLAN.md) for security, reproducibility, AI disclosure, and defense/publication readiness.
+
+---
+
+**Last Updated:** 2025-02-07  
 **Owner:** Principal Investigator

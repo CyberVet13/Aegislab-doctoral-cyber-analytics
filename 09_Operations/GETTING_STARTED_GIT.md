@@ -60,6 +60,20 @@ If you cloned `Aegislab-doctoral-cyber-analytics` into this path and then added 
 
 ---
 
+## Using Git when a parent folder has its own .git
+
+If running `git status` from AegisLab shows changes outside AegisLab (e.g. other folders or "Cyber PM Agent"), another Git repo is active (often in your user profile). To use **only** the AegisLab repo from a terminal in this folder, set:
+
+```powershell
+cd "C:\Users\kelvi\OneDrive - cybervetssolutions.com\AegisLab"
+$env:GIT_DIR = (Get-Location).Path + "\.git"
+$env:GIT_WORK_TREE = (Get-Location).Path
+```
+
+Then run `git status`, `git add`, `git commit`, `git push` as usual. They will apply only to AegisLab. (Close the terminal or unset `GIT_DIR` and `GIT_WORK_TREE` when done.)
+
+---
+
 ## OneDrive and permission notes
 
 - **OneDrive:** If this path is under OneDrive, ensure Git and OneDrive do not conflict (e.g., avoid real-time syncing of large or frequently changing files in `05_Data/` if excluded from Git). Document data location and sync rules in `05_Data/README.md`.
