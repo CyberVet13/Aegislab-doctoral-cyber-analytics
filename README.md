@@ -105,5 +105,5 @@ Research outputs are owned by the Principal Investigator and institution per app
 ---
 
 **Last Updated:** 2025-02-06  
-**Principal Investigator:** [Your name — fill in]  
+**Principal Investigator:** [Kelvin Barton]  
 **Program:** Doctor of Engineering in Cybersecurity Analytics
