@@ -1,0 +1,7 @@
+# AegisLab Workflow API — for n8n HTTP Request or other callers
+fastapi>=0.100.0
+uvicorn[standard]>=0.22.0
+python-dotenv>=1.0.0
+openai>=1.0.0
+anthropic>=0.18.0
+pyyaml>=6.0
