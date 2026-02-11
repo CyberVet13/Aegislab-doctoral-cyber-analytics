@@ -116,4 +116,42 @@ After importing a workflow, confirm in the n8n UI:
 
 ---
 
+## 8. See your workflow in n8n
+
+**To view the workflow in the n8n UI:**
+
+1. **Start n8n** (Launch_n8n.bat or `npx n8n`), then open **http://localhost:5678** in your browser.
+2. Log in if prompted (local account you created).
+3. **Workflows** → open **"AegisLab Run Agent"** (or the HTTP/Schedule workflow if you imported those).
+4. You’ll see the **canvas** with:
+   - **Manual trigger** (or **Every hour** for the schedule workflow) on the left.
+   - **Run AegisLab Agent** (Execute Command) or **Run Agent via Workflow API** (HTTP Request) on the right, connected by a line.
+5. Click a node to see its settings (command, working directory, or URL and body). Use **Test workflow** / **Execute** to run and see results under each node.
+
+**What each workflow looks like in n8n:**
+
+| Workflow | What you see on the canvas |
+|----------|----------------------------|
+| **AegisLab Run Agent** (Manual) | `[Manual Trigger]` → `[Run AegisLab Agent]` (runs CLI in your repo). |
+| **AegisLab Run Agent (HTTP API)** | `[Manual Trigger]` → `[Run Agent via Workflow API]` (POST to localhost:8000). |
+| **AegisLab Run Agent (Scheduled)** | `[Every hour]` → `[Run AegisLab Agent]` (same CLI, triggered on a schedule). |
+
+End-to-end: **10_Input** (your brief) → **this n8n workflow** (trigger + run) → **artifact + session log + review queue** → you review in Streamlit/Gradio → **11_Results** when approved.
+
+**Canvas view (Manual + CLI workflow):**
+
+```
+┌─────────────────┐      ┌──────────────────────────────┐
+│ Manual Trigger  │ ───► │ Run AegisLab Agent           │
+│                 │      │ (Execute Command: python     │
+│                 │      │  run_agent_cli.py ...)       │
+└─────────────────┘      └──────────────────────────────┘
+                                    │
+                                    ▼
+                          artifact + Session_Log +
+                          review_queue.json
+```
+
+---
+
 **Last updated:** 2025-02-11
