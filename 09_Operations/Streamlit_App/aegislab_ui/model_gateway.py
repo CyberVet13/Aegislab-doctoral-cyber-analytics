@@ -17,7 +17,7 @@ ANTHROPIC_PREFIX = "anthropic:"
 
 # Default API model ids per provider (fallbacks)
 OPENAI_DEFAULT = "gpt-4o"
-ANTHROPIC_DEFAULT = "claude-3-5-sonnet-20241022"
+ANTHROPIC_DEFAULT = "claude-sonnet-4-5-20250929"  # Claude Sonnet 4.5 (from API /v1/models)
 
 
 def _get_api_model_id(display_name: str) -> tuple[str, str]:
@@ -25,9 +25,9 @@ def _get_api_model_id(display_name: str) -> tuple[str, str]:
     if "GPT" in display_name or "gpt" in display_name:
         return "openai", MODEL_IDS.get(display_name, OPENAI_DEFAULT)
     if "Opus" in display_name:
-        return "anthropic", "claude-sonnet-4-20250514"
+        return "anthropic", MODEL_IDS.get(display_name, "claude-opus-4-6")
     if "Sonnet" in display_name:
-        return "anthropic", ANTHROPIC_DEFAULT
+        return "anthropic", MODEL_IDS.get(display_name, ANTHROPIC_DEFAULT)
     return "anthropic", ANTHROPIC_DEFAULT
 
 
@@ -146,7 +146,7 @@ class ModelGateway:
                     text += block.text
         return {
             "content": text,
-            "model": r.model_id or model_id,
+            "model": getattr(r, "model", None) or getattr(r, "model_id", None) or model_id,
             "usage": {
                 "prompt_tokens": getattr(r.usage, "input_tokens", 0),
                 "completion_tokens": getattr(r.usage, "output_tokens", 0),

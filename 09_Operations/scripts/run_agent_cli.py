@@ -11,7 +11,7 @@ import argparse
 import json
 import sys
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 # Add Streamlit_App so we can import aegislab_ui
@@ -123,7 +123,7 @@ def run(
         return False, "Output path invalid or outside repo"
 
     session_id = str(uuid.uuid4())[:8]
-    date = datetime.utcnow().strftime("%Y-%m-%d")
+    date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     prompt_summary = (research_objective or "")[:200]
     body_with_meta = inject_frontmatter(
         content,

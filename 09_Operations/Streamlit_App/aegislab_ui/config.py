@@ -46,8 +46,8 @@ REVIEW_QUEUE_PATH = "09_Operations/Gradio_App/review_queue.json"
 TEMPLATE_TYPES = ["Daily Driver", "Deep Dive", "Review/QA"]
 MODEL_IDS = {
     "GPT-5.2": "gpt-4o",  # map to available model id
-    "Claude Opus 4.6": "claude-sonnet-4-20250514",
-    "Claude Sonnet 4.5": "claude-3-5-sonnet-20241022",
+    "Claude Opus 4.6": "claude-opus-4-6",
+    "Claude Sonnet 4.5": "claude-sonnet-4-5-20250929",  # from API /v1/models
 }
 
 AGENT_NAMES = {
