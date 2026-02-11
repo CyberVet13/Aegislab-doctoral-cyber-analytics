@@ -86,14 +86,15 @@ Start the API first (from repo root):
 
 ---
 
-## 5. Import the example workflow in n8n
+## 5. Import a workflow in n8n
 
 1. Open n8n (e.g. http://localhost:5678).
 2. **Workflows** → **Add workflow** → **Import from File** (or the three-dots menu → Import).
-3. Choose:  
-   `09_Operations/n8n_Workflows/AegisLab_Run_Agent_Example.json`  
-   (from this repo).
-4. The workflow is already set with your repo path and the command above. Click **Execute** to run once (manual trigger).
+3. Choose one of (from this repo):
+   - **AegisLab_Run_Agent_Example.json** — Manual trigger + Execute Command (CLI).
+   - **AegisLab_Run_Agent_HTTP_Example.json** — Manual trigger + HTTP Request to Workflow API (start API first: `python 09_Operations/Workflow_API/app.py`).
+   - **AegisLab_Run_Agent_Schedule_Example.json** — Runs every hour via Execute Command; edit the schedule node for a different interval (e.g. daily).
+4. Each workflow is already set with your repo path / API URL. Click **Execute** to run once (manual workflows), or **Save** and **Activate** for the scheduled workflow.
 5. Ensure repo root `.env` has `OPENAI_API_KEY` and `ANTHROPIC_API_KEY`.
 
 ---

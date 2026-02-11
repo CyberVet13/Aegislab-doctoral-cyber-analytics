@@ -109,7 +109,10 @@ Response: `{ "success": true, "message": "..." }` or `{ "success": false, "error
 3. **Run agent:** Execute Command (CLI) or HTTP Request (API) with that input path and chosen agent/output.
 4. **Optional:** Send notification (email, Slack) with output path or status.
 
-See **AegisLab_Run_Agent_Example.json** for an importable n8n workflow (Manual Trigger → Execute Command).
+**Importable workflows:**  
+- **AegisLab_Run_Agent_Example.json** — Manual → Execute Command (CLI).  
+- **AegisLab_Run_Agent_HTTP_Example.json** — Manual → HTTP Request (Workflow API).  
+- **AegisLab_Run_Agent_Schedule_Example.json** — Schedule (e.g. every hour) → Execute Command.
 
 ---
 
@@ -128,7 +131,9 @@ See **AegisLab_Run_Agent_Example.json** for an importable n8n workflow (Manual T
 |------|---------|
 | **README.md** (this file) | How to use n8n with AegisLab |
 | **SETUP_REFERENCE.md** | Your repo path, command, and import steps (ready to use) |
-| **AegisLab_Run_Agent_Example.json** | Example n8n workflow (import in n8n) |
+| **AegisLab_Run_Agent_Example.json** | Manual trigger + Execute Command (CLI) |
+| **AegisLab_Run_Agent_HTTP_Example.json** | Manual trigger + HTTP Request (Workflow API) |
+| **AegisLab_Run_Agent_Schedule_Example.json** | Schedule (e.g. hourly) + Execute Command |
 | **../scripts/run_agent_cli.py** | CLI for Execute Command |
 | **../Workflow_API/** | Optional FastAPI for HTTP trigger |
 
