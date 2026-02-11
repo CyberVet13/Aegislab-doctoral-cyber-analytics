@@ -8,7 +8,7 @@
 
 ## Quick start (do this on your machine)
 
-1. **Install n8n:** `npx n8n` or Docker: `docker run -it --rm -p 5678:5678 n8nio/n8n` → open http://localhost:5678 and create local credentials.
+1. **Install n8n:** If `npx` is not in PATH, install [Node.js](https://nodejs.org/) (LTS), then run `npx n8n`. Or use Docker: `docker run -it --rm -p 5678:5678 n8nio/n8n`. Open http://localhost:5678 and create local credentials.
 2. **Import workflow:** In n8n, import `AegisLab_Run_Agent_Example.json` from this folder. Confirm the **Execute Command** node’s `cwd` is your AegisLab repo root.
 3. **Env:** Ensure repo root `.env` has `OPENAI_API_KEY` and `ANTHROPIC_API_KEY`.
 4. **Optional (HTTP):** Run Workflow API from repo root: `cd 09_Operations/Workflow_API && pip install -r requirements.txt && python app.py`, then use an n8n **HTTP Request** node to POST to `http://127.0.0.1:8000/run-agent`.
@@ -127,6 +127,7 @@ See **AegisLab_Run_Agent_Example.json** for an importable n8n workflow (Manual T
 | File | Purpose |
 |------|---------|
 | **README.md** (this file) | How to use n8n with AegisLab |
+| **SETUP_REFERENCE.md** | Your repo path, command, and import steps (ready to use) |
 | **AegisLab_Run_Agent_Example.json** | Example n8n workflow (import in n8n) |
 | **../scripts/run_agent_cli.py** | CLI for Execute Command |
 | **../Workflow_API/** | Optional FastAPI for HTTP trigger |
