@@ -15,7 +15,9 @@ AegisLab is a rigorous, auditable, and committee-defensible virtual research lab
 - **First run:** [09_Operations/FIRST_RUN.md](09_Operations/FIRST_RUN.md). **Git:** [09_Operations/GETTING_STARTED_GIT.md](09_Operations/GETTING_STARTED_GIT.md) and [09_Operations/READY_FOR_GIT.md](09_Operations/READY_FOR_GIT.md).
 - **Operational console (Streamlit UI):** [09_Operations/Streamlit_App/README.md](09_Operations/Streamlit_App/README.md) — run agents, review queue, governance audit. Run from `09_Operations/Streamlit_App/` via `streamlit run app.py` or **Launch_Streamlit_UI.bat**; open **http://localhost:8501**.
 - **Workflow manager (Gradio):** [09_Operations/Gradio_App/README.md](09_Operations/Gradio_App/README.md) — manage workflow with Gradio: 10_Input → Run Agent → Review Queue. Run `python app.py` from `09_Operations/Gradio_App/` or **Launch_Gradio_UI.bat**; open **http://127.0.0.1:7860**.
-- **Workflow automation (n8n):** [09_Operations/n8n_Workflows/README.md](09_Operations/n8n_Workflows/README.md) — use n8n to trigger agent runs (CLI or Workflow API); example workflow and CLI in `09_Operations/scripts/run_agent_cli.py`.
+- **Workflow automation (n8n):** [09_Operations/n8n_Workflows/README.md](09_Operations/n8n_Workflows/README.md) — trigger agent runs via n8n (Manual/Schedule + CLI, or HTTP to Workflow API). See [SETUP_REFERENCE.md](09_Operations/n8n_Workflows/SETUP_REFERENCE.md) for your repo path and import steps; import any of `AegisLab_Run_Agent_Example.json`, `AegisLab_Run_Agent_HTTP_Example.json`, or `AegisLab_Run_Agent_Schedule_Example.json`.
+- **Workflow visual:** [09_Operations/Workflow_Visual.md](09_Operations/Workflow_Visual.md) — diagram (10_Input → Run Agent → Review Queue → 11_Results); Streamlit, Gradio, n8n.
+- **Full agentic environment:** [09_Operations/Agentic_Environment_Workflow_View.md](09_Operations/Agentic_Environment_Workflow_View.md) — entire AI environment: all entry points, 11 agents, governance, RAG, data flow.
 
 ---
 
@@ -79,7 +81,7 @@ Each agent has a **Role_Charter.md**, **Prompt_Templates.md** (Daily Driver, Dee
 7. **Tools:** See `09_Operations/Tool_Configurations/` for Cursor and GitHub setup.
 8. **Streamlit UI (optional):** From `09_Operations/Streamlit_App/`, run `pip install -r requirements.txt`, set `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` (e.g. in a `.env` at repo root), then run `streamlit run app.py` or double-click **Launch_Streamlit_UI.bat**. Open **http://localhost:8501** for Dashboard, Run Agent, Review Queue, and Governance Audit.
 9. **Gradio workflow manager (optional):** From `09_Operations/Gradio_App/`, run `pip install -r requirements.txt` (same API keys as above), then run `python app.py` or double-click **Launch_Gradio_UI.bat**. Open **http://127.0.0.1:7860** for Workflow (10_Input + Run Agent), Review Queue, Session Logs, and Settings. Uses the same backend (`aegislab_ui`) as Streamlit.
-10. **n8n (optional):** Install n8n (`npx n8n` or Docker). Use **Execute Command** with `09_Operations/scripts/run_agent_cli.py` or **HTTP Request** to `09_Operations/Workflow_API` (see [n8n_Workflows/README.md](09_Operations/n8n_Workflows/README.md)). Import example workflow from `09_Operations/n8n_Workflows/AegisLab_Run_Agent_Example.json`.
+10. **n8n (optional):** Install n8n (`npx n8n` or Docker). See [n8n_Workflows/README.md](09_Operations/n8n_Workflows/README.md) and [SETUP_REFERENCE.md](09_Operations/n8n_Workflows/SETUP_REFERENCE.md). Import one of: **AegisLab_Run_Agent_Example.json** (Manual + CLI), **AegisLab_Run_Agent_HTTP_Example.json** (Manual + Workflow API), **AegisLab_Run_Agent_Schedule_Example.json** (e.g. hourly + CLI).
 
 ---
 

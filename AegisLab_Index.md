@@ -98,8 +98,10 @@
 | [Tool_Configurations/README.md](09_Operations/Tool_Configurations/README.md) | Cursor and GitHub configuration |
 | [Streamlit_App/README.md](09_Operations/Streamlit_App/README.md) | Operational console (Dashboard, Run Agent, Review Queue, Audit) — http://localhost:8501 |
 | [Gradio_App/README.md](09_Operations/Gradio_App/README.md) | Workflow manager (Gradio) — http://127.0.0.1:7860 |
-| [n8n_Workflows/README.md](09_Operations/n8n_Workflows/README.md) | n8n automation (CLI + Workflow API) |
+| [n8n_Workflows/README.md](09_Operations/n8n_Workflows/README.md) | n8n automation (Manual/Schedule + CLI or HTTP API); [SETUP_REFERENCE.md](09_Operations/n8n_Workflows/SETUP_REFERENCE.md) for path and import |
 | [Workflow_API/README.md](09_Operations/Workflow_API/README.md) | HTTP API for n8n (POST /run-agent) |
+| [Workflow_Visual.md](09_Operations/Workflow_Visual.md) | Workflow diagram (10_Input → Run Agent → Review Queue → 11_Results) |
+| [Agentic_Environment_Workflow_View.md](09_Operations/Agentic_Environment_Workflow_View.md) | Full agentic AI environment: entry points, 11 agents, governance, RAG |
 | [Status_Report_2025-02-06.md](02_Agents/01_PI_Orchestrator/Outputs/Status_Report_2025-02-06.md) | Current status and upcoming tasks |
 | [Decision_Logs/](09_Operations/Decision_Logs/) | PI decisions (design, threat model, etc.) |
 | [Session_Logs/](09_Operations/Session_Logs/) | Agent session logs |

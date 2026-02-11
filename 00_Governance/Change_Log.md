@@ -109,6 +109,14 @@ Document all significant changes to the AegisLab research environment, including
 **Impact:** Committee and submission workflow supported; index and README point to new artifacts  
 **Rollback Plan:** Revert if not needed
 
+### 2025-02-11 - OPERATIONS - n8n workflow automation (three workflows, Workflow API, SETUP_REFERENCE)
+**Changed By:** PI (workflow)  
+**Affected Components:** 09_Operations/n8n_Workflows/ (README, SETUP_REFERENCE.md, AegisLab_Run_Agent_Example.json, AegisLab_Run_Agent_HTTP_Example.json, AegisLab_Run_Agent_Schedule_Example.json); 09_Operations/Workflow_API/; 09_Operations/scripts/run_agent_cli.py; 10_Input/brief.md; README, AegisLab_Index  
+**Rationale:** Enable n8n to trigger agent runs via Execute Command (CLI) or HTTP Request (Workflow API); provide repo-specific path and import steps  
+**Impact:** PI can run agents from n8n (manual, scheduled, or HTTP); same governance (session logs, review queue) applies  
+**Validation:** Workflow JSONs import in n8n; SETUP_REFERENCE contains verified repo path and command  
+**Rollback Plan:** Revert n8n_Workflows and Workflow_API commits if needed
+
 ### [YYYY-MM-DD] - [CATEGORY] - [Title]
 **Changed By:**  
 **Affected Components:**  
