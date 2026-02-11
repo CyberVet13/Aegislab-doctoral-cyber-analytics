@@ -99,4 +99,21 @@ Start the API first (from repo root):
 
 ---
 
+## 6. Verify your n8n node
+
+After importing a workflow, confirm in the n8n UI:
+
+- **Execute Command node:** Working directory = `C:\Users\kelvi\OneDrive - cybervetssolutions.com\AegisLab` (or same with `/`). Command runs `python` and the CLI script with `--input`, `--agent`, `--template-type`, `--output`.
+- **HTTP Request node:** URL = `http://127.0.0.1:8000/run-agent`, Method = POST, Body = JSON (input_path, agent_num, template_type, output_path).
+- **Test:** Open the workflow → **Test workflow** / **Execute**. If the run completes without error, the node is set up correctly.
+
+---
+
+## 7. Start n8n (Windows)
+
+- **Double-click:** `09_Operations/n8n_Workflows/Launch_n8n.bat` (starts n8n; open http://localhost:5678).
+- **Or in a terminal:** `npx n8n` from any folder (Node.js required).
+
+---
+
 **Last updated:** 2025-02-11

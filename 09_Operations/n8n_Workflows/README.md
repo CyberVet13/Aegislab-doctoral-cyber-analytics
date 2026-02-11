@@ -134,6 +134,7 @@ Response: `{ "success": true, "message": "..." }` or `{ "success": false, "error
 | **AegisLab_Run_Agent_Example.json** | Manual trigger + Execute Command (CLI) |
 | **AegisLab_Run_Agent_HTTP_Example.json** | Manual trigger + HTTP Request (Workflow API) |
 | **AegisLab_Run_Agent_Schedule_Example.json** | Schedule (e.g. hourly) + Execute Command |
+| **Launch_n8n.bat** | Start n8n (Windows); then open http://localhost:5678 |
 | **../scripts/run_agent_cli.py** | CLI for Execute Command |
 | **../Workflow_API/** | Optional FastAPI for HTTP trigger |
 
