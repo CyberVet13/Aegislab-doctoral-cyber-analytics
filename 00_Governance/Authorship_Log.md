@@ -78,3 +78,5 @@ Track the authorship and contribution sources for all research artifacts, ensuri
 - [ ] Session logs cross-referenced for major artifacts
 
 **Audit Date:** _____________  **PI Signature:** _________________________
+
+| artifact_cli | 11_Results/artifact_cli.md | 2026-02-11 | AI-generated draft; see session log | Pending PI review | PI review required | Draft | — |
