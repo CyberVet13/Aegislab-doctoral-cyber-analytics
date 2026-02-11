@@ -13,16 +13,20 @@ if sys_path not in __import__("sys").path:
 from aegislab_ui.config import load_env, get_path, AGENT_NAMES
 from aegislab_ui.metadata import parse_frontmatter
 from aegislab_ui.logging_audit import append_decision_log
-from aegislab_ui.review_queue import save_review_queue
+from aegislab_ui.review_queue import save_review_queue, load_review_queue
 
 load_env()
 
 st.title("Review Queue")
 st.caption("Drafts awaiting PI action. Approve (committee-ready), request changes, or archive (logged).")
 
+if st.button("Refresh from disk", help="Reload queue from shared file (picks up items added by Gradio or CLI)"):
+    st.session_state["review_queue"] = load_review_queue()
+    st.rerun()
+
 queue = st.session_state.get("review_queue", [])
 if not queue:
-    st.info("No items in review queue. Run an agent from **Run Agent** to add drafts.")
+    st.info("No items in review queue. Run an agent from **Run Agent** (or Gradio/CLI) to add drafts. Use **Refresh from disk** if you added items elsewhere.")
     st.stop()
 
 for i, item in enumerate(queue[:20]):
