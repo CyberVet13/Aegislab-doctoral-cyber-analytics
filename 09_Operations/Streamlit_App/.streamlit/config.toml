@@ -1,0 +1,21 @@
+[theme]
+primaryColor = "#1E3A5F"
+backgroundColor = "#FAFAFA"
+secondaryBackgroundColor = "#E8EEF2"
+textColor = "#1E3A5F"
+font = "sans serif"
+
+[client]
+toolbarMode = "minimal"
+
+[server]
+# Bind to localhost only — not reachable from network or internet
+address = "127.0.0.1"
+port = 8501
+headless = true
+enableCORS = false
+enableXsrfProtection = true
+enableWebsocketCompression = true
+
+[browser]
+gatherUsageStats = false

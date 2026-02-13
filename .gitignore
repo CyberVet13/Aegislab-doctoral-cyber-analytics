@@ -1,0 +1,51 @@
+# AegisLab - Doctoral Research Environment
+# Add or uncomment items per institutional and PI preference
+
+# Environment and secrets (do not commit)
+.env
+.env.local
+*.key
+secrets/
+
+# Optional: exclude full session logs if they contain sensitive prompts/responses
+# 09_Operations/Session_Logs/*.md
+
+# OS and editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Python (if used for analysis or scripts)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Large or temporary data (document in 05_Data/README.md if excluded)
+# 05_Data/Raw/*
+# 05_Data/Processed/*
+# !05_Data/Raw/.gitkeep
+# !05_Data/Processed/.gitkeep
+
+# Build and tooling (if any)
+node_modules/
+dist/
+build/
+*.log
+
+# Local only (keep repo clean)
+*.local
+.cursor/
+
+# Streamlit RAG index (ChromaDB; rebuild with "Build RAG index" in Run Agent)
+09_Operations/Streamlit_App/rag_index/
+
+# Gradio workflow manager (local queue state)
+09_Operations/Gradio_App/review_queue.json
