@@ -6,6 +6,8 @@ echo.
 
 where npx >nul 2>&1
 if %errorlevel% equ 0 (
+    REM n8n 2.x: Execute Command node is disabled by default; enable it for AegisLab CLI
+    set NODES_EXCLUDE=[]
     npx n8n
     goto :end
 )
@@ -13,7 +15,7 @@ if %errorlevel% equ 0 (
 where docker >nul 2>&1
 if %errorlevel% equ 0 (
     echo npx not found. Using Docker instead...
-    docker run -it --rm -p 5678:5678 n8nio/n8n
+    docker run -e NODES_EXCLUDE="[]" -it --rm -p 5678:5678 n8nio/n8n
     goto :end
 )
 
@@ -22,7 +24,7 @@ echo.
 echo Fix: Install Node.js (LTS) from https://nodejs.org
 echo      Then restart this launcher or reopen your terminal.
 echo.
-echo Alternative: If you have Docker, run: docker run -it --rm -p 5678:5678 n8nio/n8n
+echo Alternative: If you have Docker, run: docker run -e NODES_EXCLUDE="[]" -it --rm -p 5678:5678 n8nio/n8n
 echo.
 pause
 exit /b 1
