@@ -6,7 +6,6 @@ AegisLab Gradio — workflow manager.
 """
 
 import sys
-import json
 import uuid
 from pathlib import Path
 from datetime import datetime
@@ -29,6 +28,7 @@ from aegislab_ui.config import (
     INPUT_DIR,
     SESSION_LOGS_DIR,
 )
+from aegislab_ui.review_queue import load_review_queue, save_review_queue
 from aegislab_ui.repo_validator import RepoValidator
 from aegislab_ui.templates_loader import TemplatesLoader
 from aegislab_ui.router import Router
@@ -39,20 +39,13 @@ from aegislab_ui.safety import SafetyGuard
 
 load_env()
 
-REVIEW_QUEUE_FILE = _GRADIO_DIR / "review_queue.json"
-
 
 def _load_queue():
-    if REVIEW_QUEUE_FILE.exists():
-        try:
-            return json.loads(REVIEW_QUEUE_FILE.read_text(encoding="utf-8"))
-        except Exception:
-            pass
-    return []
+    return load_review_queue()
 
 
 def _save_queue(queue):
-    REVIEW_QUEUE_FILE.write_text(json.dumps(queue, indent=2), encoding="utf-8")
+    save_review_queue(queue)
 
 
 def list_input_files():
@@ -79,7 +72,7 @@ def load_input_into_context(filename):
         return ""
 
 
-def run_agent(agent_num, template_type, model_choice, research_objective, assumptions, constraints, output_path, use_override, override_rationale):
+def run_agent(agent_num, template_type, model_choice, research_objective, assumptions, constraints, output_path, use_override, override_rationale, defensive_confirmed=True):
     if not output_path or not output_path.strip():
         return "Error: Set an output path.", ""
     validator = RepoValidator()
@@ -89,6 +82,8 @@ def run_agent(agent_num, template_type, model_choice, research_objective, assump
     allowed, msg = safety.check_prompt(research_objective or "")
     if not allowed:
         return f"Error: {msg}", ""
+    if safety.defensive_scope_confirmation_required(research_objective or "") and not defensive_confirmed:
+        return f"Error: {safety.get_defensive_scope_warning()} Check the defensive-scope confirmation box.", ""
     if use_override and (not override_rationale or not override_rationale.strip()):
         return "Error: Provide a rationale for manual model override.", ""
     loader = TemplatesLoader()
@@ -206,6 +201,35 @@ def review_archive(path):
     return get_review_queue_display()
 
 
+def review_approve_all():
+    """Approve all items in queue (batch)."""
+    queue = _load_queue()
+    remaining = []
+    for item in queue:
+        path = item.get("path", "")
+        full_path = get_path(path)
+        if full_path.exists():
+            text = full_path.read_text(encoding="utf-8", errors="replace")
+            meta, body = parse_frontmatter(text)
+            meta["PI_Review_Status"] = "Approved"
+            extra = {k: v for k, v in meta.items() if k not in ("Session_Date", "Model_Used", "Prompt_Summary", "Output_Path", "PI_Review_Status", "AI_Assisted")}
+            new_text = inject_frontmatter(
+                body,
+                session_date=meta.get("Session_Date", item.get("date", "")),
+                model_used=meta.get("Model_Used", item.get("model", "")),
+                prompt_summary=meta.get("Prompt_Summary", ""),
+                output_path=path,
+                pi_review_status="Approved",
+                extra=extra if extra else None,
+            )
+            full_path.write_text(new_text, encoding="utf-8")
+            append_decision_log(datetime.utcnow().strftime("%Y-%m-%d"), "PI_Approval", f"\n- **Artifact:** {path}\n- **Action:** Approved (batch)\n")
+        else:
+            remaining.append(item)
+    _save_queue(remaining)
+    return get_review_queue_display()
+
+
 def list_session_logs(filter_date, filter_agent):
     logs_dir = get_path(SESSION_LOGS_DIR)
     if not logs_dir.exists():
@@ -286,11 +310,15 @@ def build_ui():
                 with gr.Row():
                     assumptions = gr.Textbox(placeholder="Assumptions (optional)", label="Assumptions")
                     constraints = gr.Textbox(placeholder="Constraints (optional)", label="Constraints")
+                defensive_scope_cb = gr.Checkbox(
+                    label="I confirm this is defensive/authorized scope only (required when topic may involve offensive security)",
+                    value=False,
+                )
                 run_btn = gr.Button("Run agent")
                 run_status = gr.Textbox(label="Status", interactive=False)
                 run_preview = gr.Textbox(label="Output preview", interactive=False, lines=10)
 
-                def do_run(agent_val, template_val, model_radio_val, model_override_val, context_val, assumptions_val, constraints_val, output_val, override_ratio_val):
+                def do_run(agent_val, template_val, model_radio_val, model_override_val, context_val, assumptions_val, constraints_val, output_val, override_ratio_val, defensive_val):
                     use_over = model_radio_val == "Manual override"
                     rec = router.get_recommended_model(int(agent_val), template_val)
                     model_choice = model_override_val if use_over and model_override_val else rec
@@ -304,11 +332,12 @@ def build_ui():
                         output_val or "",
                         use_over,
                         override_ratio_val or "",
+                        defensive_confirmed=defensive_val,
                     )
 
                 run_btn.click(
                     fn=do_run,
-                    inputs=[agent_dropdown, template_dropdown, model_radio, model_override, context_box, assumptions, constraints, output_path, override_rationale],
+                    inputs=[agent_dropdown, template_dropdown, model_radio, model_override, context_box, assumptions, constraints, output_path, override_rationale, defensive_scope_cb],
                     outputs=[run_status, run_preview],
                 )
 
@@ -321,10 +350,12 @@ def build_ui():
                     btn_approve = gr.Button("Approve")
                     btn_request = gr.Button("Request changes")
                     btn_archive = gr.Button("Archive")
+                    btn_approve_all = gr.Button("✓ Approve all")
                 btn_approve.click(fn=review_approve, inputs=[path_for_action], outputs=[queue_display])
                 btn_request.click(fn=review_request_changes, inputs=[path_for_action], outputs=[queue_display])
                 btn_archive.click(fn=review_archive, inputs=[path_for_action], outputs=[queue_display])
-                gr.Markdown("After an action, paste the next path and click again. Refresh the tab to see updated list.")
+                btn_approve_all.click(fn=review_approve_all, inputs=[], outputs=[queue_display])
+                gr.Markdown("After an action, paste the next path and click again. **Approve all** approves all items in queue. Refresh the tab to see updated list.")
 
             # --- Session Logs ---
             with gr.Tab("Session Logs"):

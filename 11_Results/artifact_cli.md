@@ -2,11 +2,11 @@
 AI_Assisted: True
 Session_Date: 2026-02-11
 Model_Used: Claude Sonnet 4.5
-Prompt_Summary: "# Sample brief for n8n / Run Agent
+Prompt_Summary: "# Sample brief for Run Agent
 
 Use this file as the default input for the **AegisLab Run Agent** workflow.
 
-- **n8n (Execute Command):** `--input 10_Input/brief.md`
+- **CLI:** `--input 10_Input/brief.md`
 - **Workflow API (HTTP):** `"i"
 PI_Review_Status: Draft
 Output_Path: 11_Results/artifact_cli.md

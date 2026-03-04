@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AegisLab — Agentic AI Environment</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gators-blue: #0021A5;
+      --gators-orange: #FA4616;
+      --bg-dark: #001a66;
+      --bg-layer1: #002080;
+      --text: #ffffff;
+      --text-muted: #a0c4ff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 30px;
+      background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-layer1) 100%);
+      border-bottom: 2px solid var(--gators-orange);
+    }
+    .header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      color: var(--gators-orange);
+      text-shadow: 0 0 20px rgba(250,70,22,0.5);
+    }
+    .header .status { margin-left: auto; padding: 8px 16px; border-radius: 8px; font-weight: 600; color: #fff; }
+    .header .status-operational { background: var(--gators-orange); color: #fff; }
+    .header .status-offline { background: #6b7280; color: #fff; }
+    .header .status-checking { background: #3b82f6; color: #fff; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+    .metric-card {
+      background: var(--bg-layer1);
+      border: 1px solid rgba(250,70,22,0.3);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .metric-card .value { font-size: 2rem; font-weight: 700; color: var(--gators-orange); }
+    .metric-card .label { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+    .section {
+      background: var(--bg-layer1);
+      border: 1px solid rgba(250,70,22,0.3);
+      border-radius: 12px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .section-header {
+      padding: 16px 20px;
+      background: rgba(0,0,0,0.2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      color: var(--gators-orange);
+    }
+    .section-header:hover { background: rgba(250,70,22,0.1); }
+    .section-header .arrow { transition: transform 0.2s; }
+    .section.collapsed .section-content { display: none; }
+    .section.collapsed .arrow { transform: rotate(-90deg); }
+    .section-content { padding: 20px; }
+    .cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .card {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(250,70,22,0.2);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+    .card:hover { border-color: var(--gators-orange); box-shadow: 0 0 20px rgba(250,70,22,0.2); }
+    .card .num { width: 40px; height: 40px; margin: 0 auto 16px; background: linear-gradient(135deg, var(--gators-orange), #ff8c42); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+    .card h3 { margin-bottom: 12px; font-size: 1.1rem; }
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-size: 0.95rem;
+      margin: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-primary { background: var(--gators-orange); color: white; }
+    .btn-primary:hover { background: #ff6b2b; box-shadow: 0 0 15px rgba(250,70,22,0.5); }
+    .btn-secondary { background: var(--gators-blue); color: white; border: 1px solid var(--gators-orange); }
+    .btn-secondary:hover { background: #0030c0; }
+    .info-box {
+      background: rgba(250,70,22,0.15);
+      border: 1px solid var(--gators-orange);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+    .info-box h4 { margin-bottom: 8px; color: var(--gators-orange); }
+    .agent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .agent-card {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(250,70,22,0.2);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .agent-card .tag { font-size: 0.7rem; padding: 2px 6px; background: var(--gators-orange); border-radius: 4px; }
+    .config-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .config-panel {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(250,70,22,0.2);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .config-panel h4 { margin-bottom: 12px; color: var(--gators-orange); }
+    .config-panel input { width: 100%; padding: 8px; margin: 8px 0; background: #001a66; border: 1px solid var(--gators-orange); border-radius: 4px; color: white; }
+    .action-panel { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+    .log {
+      background: #000;
+      border: 1px solid rgba(250,70,22,0.3);
+      border-radius: 8px;
+      padding: 16px;
+      max-height: 300px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 0.85rem;
+    }
+    .log-entry { margin: 4px 0; color: #a0c4ff; }
+    .log-entry .time { color: #666; margin-right: 8px; }
+    .workflow-item { display: flex; align-items: center; gap: 12px; margin: 12px 0; }
+    .workflow-item .bar { flex: 1; height: 8px; background: rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden; }
+    .workflow-item .fill { height: 100%; background: var(--gators-orange); border-radius: 4px; }
+    .toast {
+      position: fixed; bottom: 24px; right: 24px; padding: 16px 24px; border-radius: 8px;
+      background: var(--gators-orange); color: white; font-weight: 600; z-index: 9999;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4); animation: fadeIn 0.3s;
+    }
+    .toast.error { background: #dc2626; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .section-note {
+      font-size: 0.9rem; color: var(--text-muted); margin-top: 16px; padding: 12px;
+      background: rgba(0,0,0,0.2); border-radius: 8px; border-left: 3px solid var(--gators-orange);
+    }
+    .agent-card { flex-wrap: wrap; justify-content: space-between; }
+    .agent-card .agent-name { flex: 1; min-width: 0; margin: 0 8px; }
+    .agent-card .btn-train { padding: 4px 10px; font-size: 0.7rem; background: var(--gators-blue); border: 1px solid var(--gators-orange); border-radius: 4px; color: white; cursor: pointer; }
+    .agent-card .btn-train:hover { background: var(--gators-orange); }
+    .agent-card .health-ok { color: #4ade80; background: transparent; }
+    .agent-card .health-warn { color: #fbbf24; background: transparent; }
+    .agent-card .health-error { color: #f87171; background: transparent; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>AEGISLAB — Agentic AI Environment</h1>
+    <span class="status status-checking" id="status-badge">● CHECKING...</span>
+  </header>
+
+  <div class="container">
+    <div class="metrics">
+      <div class="metric-card"><div class="value">11</div><div class="label">Agents</div></div>
+      <div class="metric-card"><div class="value" id="metric-tasks">—</div><div class="label">Tasks Queued</div></div>
+      <div class="metric-card"><div class="value" id="metric-uptime">—</div><div class="label">Uptime</div></div>
+    </div>
+
+    <div class="section" id="course-section">
+      <div class="section-header" onclick="toggleSection('course-section')">
+        <span class="arrow">▼</span> Course Management & Document Processing
+      </div>
+      <div class="section-content">
+        <div class="cards-3">
+          <div class="card">
+            <div class="num">1</div>
+            <h3>Upload Documents</h3>
+            <p>Upload course assignments to 10_Input</p>
+            <input type="file" id="file-upload" multiple accept=".docx,.xlsx,.pdf,.md,.txt,.pptx,.json" style="display:none" onchange="handleUpload(event)">
+            <button class="btn btn-primary" id="upload-btn" onclick="document.getElementById('file-upload').click()">📤 Upload Document</button>
+            <button class="btn btn-secondary" onclick="openFolder('10_Input')">📂 Open 10_Input</button>
+            <p style="font-size:0.75rem;color:var(--text-muted);margin-top:8px">For direct upload: Start Workflow API first (see 09_Operations/Workflow_API)</p>
+          </div>
+          <div class="card">
+            <div class="num">2</div>
+            <h3>Auto-Process</h3>
+            <p>Start agents to work on class assignments</p>
+            <button class="btn btn-primary" id="auto-process-btn" onclick="startAutoProcess()">▶️ Start Auto-Process</button>
+          </div>
+          <div class="card">
+            <div class="num">3</div>
+            <h3>Get Results</h3>
+            <p>Open folder to see all deliverables</p>
+            <button class="btn btn-primary" onclick="openFolder('11_Results')">📂 Open Deliverables</button>
+          </div>
+        </div>
+        <p class="section-note"><strong>What this does:</strong> Upload course documents, trigger AI agents to process assignments, and access completed deliverables (Word/Excel) in 11_Results.</p>
+      </div>
+    </div>
+
+    <div class="section" id="repo-section">
+      <div class="section-header" onclick="toggleSection('repo-section')">
+        <span class="arrow">▼</span> Repository Management
+      </div>
+      <div class="section-content">
+        <div class="info-box">
+          <h4>Cursor IDE — Code Editor</h4>
+          <div class="action-panel">
+            <button class="btn btn-primary" onclick="openCursor()">🖥️ Open Project in Cursor</button>
+            <button class="btn btn-secondary" onclick="openTerminalInCursor()">💻 Open Terminal</button>
+            <button class="btn btn-secondary" onclick="openNewAgentInCursor()">🤖 Open New Agent</button>
+          </div>
+          <hr style="margin:16px 0;border-color:rgba(250,70,22,0.3)">
+          <label>Project Path:</label>
+          <input type="text" id="project-path" value="C:\Users\kelvi\OneDrive - cybervetssolutions.com\AegisLab">
+          <label>Cursor Path:</label>
+          <input type="text" id="cursor-path" value="C:\Users\kelvi\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Cursor\Cursor.lnk">
+        </div>
+        <div class="config-row">
+          <div class="config-panel">
+            <h4>Repository Status</h4>
+            <p>Branch: <strong id="repo-branch">—</strong></p>
+            <p>Repo: CyberVet13/Aegislab-doctoral-cyber-analytics</p>
+            <a href="https://github.com/CyberVet13/Aegislab-doctoral-cyber-analytics/tree/branch02132026" target="_blank" class="btn btn-secondary">🔄 Sync with GitHub</a>
+          </div>
+          <div class="config-panel">
+            <h4>Quick Configuration</h4>
+            <a href="https://github.com/CyberVet13/Aegislab-doctoral-cyber-analytics/blob/branch02132026/00_Governance/Academic_Integrity_Policy.md" target="_blank" class="btn btn-secondary">Academic Integrity</a>
+            <a href="https://github.com/CyberVet13/Aegislab-doctoral-cyber-analytics/blob/branch02132026/09_Operations/Model_Routing.md" target="_blank" class="btn btn-secondary">Model Routing</a>
+            <a href="https://github.com/CyberVet13/Aegislab-doctoral-cyber-analytics/blob/branch02132026/README.md" target="_blank" class="btn btn-secondary">README</a>
+          </div>
+        </div>
+        <p class="section-note"><strong>What this does:</strong> Open the project in Cursor, manage paths, sync with GitHub, and access governance/config docs.</p>
+      </div>
+    </div>
+
+    <div class="section" id="workflow-section">
+      <div class="section-header" onclick="toggleSection('workflow-section')">
+        <span class="arrow">▼</span> Research Workflow Progress
+      </div>
+      <div class="section-content">
+        <div id="assignment-progress">
+          <div class="workflow-item">
+            <span style="width:200px">Assignment: Literature Review</span>
+            <div class="bar"><div class="fill" id="wf-1" style="width:0%"></div></div>
+            <span id="wf-1-pct">0%</span>
+          </div>
+          <div class="workflow-item">
+            <span style="width:200px">Assignment: Architecture Design</span>
+            <div class="bar"><div class="fill" id="wf-2" style="width:0%"></div></div>
+            <span id="wf-2-pct">0%</span>
+          </div>
+          <div class="workflow-item">
+            <span style="width:200px">Assignment: Threat Analysis</span>
+            <div class="bar"><div class="fill" id="wf-3" style="width:0%"></div></div>
+            <span id="wf-3-pct">0%</span>
+          </div>
+          <div class="workflow-item">
+            <span style="width:200px">Current: <span id="current-assignment">—</span></span>
+            <div class="bar"><div class="fill" id="wf-current" style="width:0%"></div></div>
+            <span id="wf-current-pct">0%</span>
+          </div>
+        </div>
+        <p class="section-note"><strong>What this does:</strong> Shows assignment progress as agents work on them. Updates when auto-process runs.</p>
+      </div>
+    </div>
+
+    <div class="section" id="agent-section">
+      <div class="section-header" onclick="toggleSection('agent-section')">
+        <span class="arrow">▼</span> Agent Control Panel
+      </div>
+      <div class="section-content">
+        <div class="agent-grid">
+          <div class="agent-card" data-agent="01"><span class="tag health-ok" title="Healthy">●</span><span class="tag">01</span><span class="agent-name">PI/Orchestrator</span><button class="btn-train" onclick="trainAgent('01')">Train</button></div>
+          <div class="agent-card" data-agent="02"><span class="tag health-ok" title="Healthy">●</span><span class="tag">02</span><span class="agent-name">Applied Research Methodologist</span><button class="btn-train" onclick="trainAgent('02')">Train</button></div>
+          <div class="agent-card" data-agent="03"><span class="tag health-ok" title="Healthy">●</span><span class="tag">03</span><span class="agent-name">Engineering Praxis Architect</span><button class="btn-train" onclick="trainAgent('03')">Train</button></div>
+          <div class="agent-card" data-agent="04"><span class="tag health-ok" title="Healthy">●</span><span class="tag">04</span><span class="agent-name">Cyber Threat & Adversary Analysis</span><button class="btn-train" onclick="trainAgent('04')">Train</button></div>
+          <div class="agent-card" data-agent="05"><span class="tag health-ok" title="Healthy">●</span><span class="tag">05</span><span class="agent-name">Cybersecurity Architecture & Zero Trust</span><button class="btn-train" onclick="trainAgent('05')">Train</button></div>
+          <div class="agent-card" data-agent="06"><span class="tag health-ok" title="Healthy">●</span><span class="tag">06</span><span class="agent-name">Applied Cryptography & Data Protection</span><button class="btn-train" onclick="trainAgent('06')">Train</button></div>
+          <div class="agent-card" data-agent="07"><span class="tag health-ok" title="Healthy">●</span><span class="tag">07</span><span class="agent-name">Security Data Analytics</span><button class="btn-train" onclick="trainAgent('07')">Train</button></div>
+          <div class="agent-card" data-agent="08"><span class="tag health-ok" title="Healthy">●</span><span class="tag">08</span><span class="agent-name">Visualization & Decision Support</span><button class="btn-train" onclick="trainAgent('08')">Train</button></div>
+          <div class="agent-card" data-agent="09"><span class="tag health-ok" title="Healthy">●</span><span class="tag">09</span><span class="agent-name">Doctoral Writing & Argumentation</span><button class="btn-train" onclick="trainAgent('09')">Train</button></div>
+          <div class="agent-card" data-agent="10"><span class="tag health-ok" title="Healthy">●</span><span class="tag">10</span><span class="agent-name">Committee & Defense Simulation</span><button class="btn-train" onclick="trainAgent('10')">Train</button></div>
+          <div class="agent-card" data-agent="11"><span class="tag health-ok" title="Healthy">●</span><span class="tag">11</span><span class="agent-name">Ethics, Governance & Risk</span><button class="btn-train" onclick="trainAgent('11')">Train</button></div>
+        </div>
+        <p class="section-note"><strong>What this does:</strong> View agent health status (● green = healthy) and launch training/prompt refinement for each agent.</p>
+      </div>
+    </div>
+
+    <div class="section" id="activity-section">
+      <div class="section-header" onclick="toggleSection('activity-section')">
+        <span class="arrow">▼</span> Activity Log
+      </div>
+      <div class="section-content">
+        <div class="log" id="activity-log"></div>
+      </div>
+    </div>
+  </div>
+  <div id="toast-container"></div>
+
+  <script>
+    const ROOT = 'C:\\Users\\kelvi\\OneDrive - cybervetssolutions.com\\AegisLab';
+    const INPUT_PATH = ROOT + '\\10_Input';
+    const RESULTS_PATH = ROOT + '\\11_Results';
+
+    function log(msg) {
+      const el = document.getElementById('activity-log');
+      const time = new Date().toLocaleTimeString();
+      el.innerHTML += '<div class="log-entry"><span class="time">[' + time + ']</span>' + msg + '</div>';
+      el.scrollTop = el.scrollHeight;
+    }
+
+    function toast(msg, isError) {
+      const c = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className = 'toast' + (isError ? ' error' : '');
+      t.textContent = msg;
+      c.innerHTML = '';
+      c.appendChild(t);
+      setTimeout(function() { t.remove(); }, 4000);
+    }
+
+    function toggleSection(id) {
+      document.getElementById(id).classList.toggle('collapsed');
+    }
+
+    async function openFolder(name) {
+      const path = name === '10_Input' ? INPUT_PATH : RESULTS_PATH;
+      log('Opening ' + name + ': ' + path);
+      try {
+        const res = await fetch(API_URL + '/open-folder?folder=' + encodeURIComponent(name), { method: 'POST' });
+        const data = await res.json().catch(function() { return {}; });
+        if (res.ok && data.success) {
+          toast('Opening ' + name + ' in File Explorer');
+          log('Opened ' + name);
+        } else {
+          throw new Error(data.detail || 'Failed to open folder');
+        }
+      } catch (err) {
+        log('API open failed, trying file:// — ' + (err.message || ''));
+        const fileUrl = 'file:///' + path.replace(/\\/g, '/');
+        const w = window.open(fileUrl, '_blank');
+        if (!w || w.closed || typeof w.closed === 'undefined') {
+          navigator.clipboard.writeText(path).then(function() {
+            toast('Path copied. Paste in File Explorer address bar.', true);
+          }).catch(function() {
+            toast('Path: ' + path, true);
+          });
+        }
+      }
+    }
+
+    function copyPath(name) {
+      const path = name === '10_Input' ? INPUT_PATH : RESULTS_PATH;
+      navigator.clipboard.writeText(path).then(function() {
+        log('Path copied: ' + path);
+        toast('Path copied. Paste in File Explorer address bar.');
+      }).catch(function() {
+        toast('Path: ' + path, true);
+      });
+    }
+
+    async function showResults() {
+      const el = document.getElementById('results-list');
+      if (el.style.display === 'block' && el.dataset.loaded === '1') {
+        el.style.display = 'none';
+        return;
+      }
+      el.style.display = 'block';
+      el.innerHTML = '<div class="log-entry">Loading...</div>';
+      el.dataset.loaded = '0';
+      try {
+        const res = await fetch(API_URL + '/results');
+        const data = await res.json();
+        el.dataset.loaded = '1';
+        if (!data.files || data.files.length === 0) {
+          el.innerHTML = '<div class="log-entry" style="color:var(--text-muted)">No files yet. Run Auto-Process first.</div>';
+          return;
+        }
+        let html = '<div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:8px">' + data.files.length + ' file(s) — click to download</div>';
+        for (let i = 0; i < data.files.length; i++) {
+          const f = data.files[i];
+          const size = f.size ? (f.size < 1024 ? f.size + ' B' : (f.size / 1024).toFixed(1) + ' KB') : '';
+          html += '<div class="log-entry" style="display:flex;align-items:center;gap:8px;margin:4px 0">';
+          html += '<a href="' + API_URL + f.url + '" download="' + f.name + '" class="btn btn-primary" style="padding:6px 12px;font-size:0.85rem;text-decoration:none">⬇ ' + f.name + '</a>';
+          if (size) html += '<span style="color:var(--text-muted);font-size:0.8rem">' + size + '</span>';
+          html += '</div>';
+        }
+        html += '<div style="margin-top:8px"><a href="#" onclick="document.getElementById(\'results-list\').style.display=\'none\';return false" style="color:var(--text-muted);font-size:0.8rem">Hide</a></div>';
+        el.innerHTML = html;
+      } catch (err) {
+        el.innerHTML = '<div class="log-entry" style="color:#f87171">Failed to load. ' + (err.message || '') + '</div>';
+      }
+    }
+
+    function openInCursor(name) {
+      const path = name === '10_Input' ? INPUT_PATH : RESULTS_PATH;
+      log('Opening ' + name + ' in Cursor: ' + path);
+      window.location.href = 'cursor://file/' + path.replace(/\\/g, '/');
+    }
+
+    const API_URL = (window.location.port === '8002') ? window.location.origin : 'http://127.0.0.1:8002';
+    const REFRESH_INTERVAL = 15000;
+
+    function formatUptime(sec) {
+      if (sec < 60) return sec + 's';
+      if (sec < 3600) return Math.floor(sec / 60) + 'm';
+      return Math.floor(sec / 3600) + 'h';
+    }
+
+    async function refreshDashboard() {
+      try {
+        const res = await fetch(API_URL + '/health');
+        const data = await res.json();
+        const badge = document.getElementById('status-badge');
+        badge.textContent = '● OPERATIONAL';
+        badge.className = 'status status-operational';
+        document.getElementById('metric-tasks').textContent = data.tasks_queued ?? '—';
+        document.getElementById('metric-uptime').textContent = formatUptime(data.uptime_seconds ?? 0);
+        const branchEl = document.getElementById('repo-branch');
+        if (branchEl) branchEl.textContent = data.branch || '—';
+        setAgentHealth(true);
+      } catch (err) {
+        const badge = document.getElementById('status-badge');
+        badge.textContent = '● OFFLINE';
+        badge.className = 'status status-offline';
+        document.getElementById('metric-tasks').textContent = '—';
+        document.getElementById('metric-uptime').textContent = '—';
+        setAgentHealth(false);
+      }
+      try {
+        const asRes = await fetch(API_URL + '/assignment-status');
+        const asData = await asRes.json();
+        updateWorkflowFromStatus(asData);
+      } catch (e) { /* ignore */ }
+    }
+
+    function setAgentHealth(healthy) {
+      const cards = document.querySelectorAll('.agent-card [class*="health-"]');
+      cards.forEach(function(el) {
+        el.className = healthy ? 'tag health-ok' : 'tag health-error';
+        el.title = healthy ? 'Healthy' : 'API offline';
+      });
+    }
+
+    function updateWorkflowFromStatus(data) {
+      const queued = data.queued || [];
+      const completed = data.completed || [];
+      const items = queued.map(function(f) { return { name: f.name, pct: 0 }; }).concat(
+        completed.map(function(f) { return { name: f.name, pct: 100 }; })
+      );
+      for (var i = 1; i <= 3; i++) {
+        var item = items[i - 1];
+        var bar = document.getElementById('wf-' + i);
+        var pctEl = document.getElementById('wf-' + i + '-pct');
+        var row = document.querySelector('#assignment-progress .workflow-item:nth-child(' + i + ')');
+        if (row) {
+          var labelSpan = row.querySelector('span:first-child');
+          if (item) {
+            if (bar) bar.style.width = item.pct + '%';
+            if (pctEl) pctEl.textContent = item.pct + '%';
+            if (labelSpan) labelSpan.textContent = 'Assignment: ' + item.name;
+          } else if (labelSpan) {
+            labelSpan.textContent = 'Assignment: —';
+            if (bar) bar.style.width = '0%';
+            if (pctEl) pctEl.textContent = '0%';
+          }
+        }
+      }
+      var cur = document.getElementById('current-assignment');
+      var curBar = document.getElementById('wf-current');
+      var curPct = document.getElementById('wf-current-pct');
+      if (items.length > 0 && cur && curBar && curPct) {
+        var last = items[items.length - 1];
+        cur.textContent = last.name + ' (' + last.pct + '%)';
+        curBar.style.width = last.pct + '%';
+        curPct.textContent = last.pct + '%';
+      } else if (cur) {
+        cur.textContent = '—';
+        if (curBar) curBar.style.width = '0%';
+        if (curPct) curPct.textContent = '0%';
+      }
+    }
+
+    async function handleUpload(ev) {
+      const files = ev.target.files;
+      if (!files.length) return;
+      const btn = document.getElementById('upload-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Uploading...'; }
+      log('Upload: ' + files.length + ' file(s) selected');
+      for (let i = 0; i < files.length; i++) {
+        log('  - ' + files[i].name);
+      }
+      try {
+        const formData = new FormData();
+        for (let i = 0; i < files.length; i++) {
+          formData.append('files', files[i]);
+        }
+        const res = await fetch(API_URL + '/upload', { method: 'POST', body: formData });
+        const data = await res.json().catch(function() { return {}; });
+        if (res.ok && data.success && data.saved && data.saved.length > 0) {
+          log('Saved to 10_Input: ' + data.saved.join(', '));
+          toast('Uploaded: ' + data.saved.join(', '));
+          refreshDashboard();
+          openFolder('10_Input');
+        } else {
+          let detail = data.detail;
+          if (Array.isArray(detail)) detail = detail.map(function(d) { return d.msg || JSON.stringify(d); }).join('; ');
+          else if (typeof detail === 'object') detail = JSON.stringify(detail);
+          throw new Error(detail || (res.status ? 'Upload failed (' + res.status + ')' : 'Upload failed'));
+        }
+      } catch (err) {
+        const msg = err.message || 'Upload failed. Is the Workflow API running on port 8002?';
+        log('Upload error: ' + msg);
+        toast(msg, true);
+        navigator.clipboard.writeText(INPUT_PATH).then(function() {
+          log('Path copied. You can drag files into 10_Input manually.');
+          openFolder('10_Input');
+        }).catch(function() {
+          openFolder('10_Input');
+        });
+      } finally {
+        const b = document.getElementById('upload-btn');
+        if (b) { b.disabled = false; b.textContent = '📤 Upload Document'; }
+      }
+      ev.target.value = '';
+    }
+
+    async function startAutoProcess() {
+      log('Starting Auto-Process — agents will process documents in 10_Input');
+      const btn = document.getElementById('auto-process-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Processing...'; }
+      try {
+        const res = await fetch(API_URL + '/process-input', { method: 'POST' });
+        const data = await res.json().catch(function() { return {}; });
+        if (res.ok && data.success) {
+          const msg = data.message || (data.processed > 0 ? 'Processing ' + data.processed + ' file(s)' : 'No files in 10_Input');
+          log(msg);
+          toast(data.processed > 0 ? 'Processing started. Check 11_Results in a few minutes.' : 'No files in 10_Input');
+          refreshDashboard();
+          if (data.processed > 0) {
+            log('Watch the API window for progress. Results will appear in 11_Results.');
+          }
+        } else throw new Error(data.detail || (res.status ? 'Process failed (' + res.status + ')' : 'Failed'));
+      } catch (err) {
+        const msg = err.message || 'API not reachable. Start Workflow API (port 8002) or run Start_Auto_Processor.bat';
+        log('Auto-Process error: ' + msg);
+        toast(msg, true);
+        const opsPath = ROOT.replace(/\\/g, '/') + '/09_Operations';
+        const w = window.open('file:///' + opsPath, '_blank');
+        if (!w || w.closed) {
+          navigator.clipboard.writeText(ROOT + '\\09_Operations').then(function() {
+            toast('09_Operations path copied. Open in File Explorer.', true);
+          });
+        }
+      } finally {
+        const b = document.getElementById('auto-process-btn');
+        if (b) { b.disabled = false; b.textContent = '▶️ Start Auto-Process'; }
+      }
+    }
+
+    const AGENT_FOLDERS = { '01':'01_PI_Orchestrator','02':'02_Applied_Research_Methodologist','03':'03_Engineering_Praxis_Architect','04':'04_Cyber_Threat_Adversary_Analysis','05':'05_Cybersecurity_Architecture_ZeroTrust','06':'06_Applied_Cryptography_DataProtection','07':'07_Security_Data_Analytics','08':'08_Visualization_Decision_Support','09':'09_Doctoral_Writing_Argumentation','10':'10_Committee_Defense_Simulation','11':'11_Ethics_Governance_Risk' };
+
+    function trainAgent(id) {
+      const folder = AGENT_FOLDERS[id] || ('0' + id + '_Agent');
+      const path = ROOT.replace(/\\/g, '/') + '/02_Agents/' + folder;
+      log('Opening agent folder: ' + folder);
+      window.location.href = 'cursor://file/' + path;
+    }
+
+    function startProcessor() {
+      startAutoProcess();
+    }
+
+    function openCursor() {
+      const proj = document.getElementById('project-path').value;
+      log('Opening Cursor with: ' + proj);
+      window.location.href = 'cursor://file/' + proj.replace(/\\/g, '/');
+    }
+
+    function openTerminalInCursor() {
+      const proj = document.getElementById('project-path').value;
+      log('Opening Cursor — press Ctrl+` for terminal');
+      window.location.href = 'cursor://file/' + proj.replace(/\\/g, '/');
+    }
+
+    function openNewAgentInCursor() {
+      const proj = document.getElementById('project-path').value;
+      log('Opening new Cursor window with project');
+      window.location.href = 'cursor://file/' + proj.replace(/\\/g, '/');
+    }
+
+    log('AegisLab Dashboard loaded.');
+    if (window.location.protocol === 'file:') {
+      toast('Opened from file:// — API calls may fail. Use Launch_AegisLab.bat for best results.', true);
+    }
+    refreshDashboard();
+    setInterval(refreshDashboard, REFRESH_INTERVAL);
+  </script>
+</body>
+</html>

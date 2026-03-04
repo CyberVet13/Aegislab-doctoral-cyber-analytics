@@ -112,6 +112,7 @@ st.subheader("Model")
 recommended = router.get_recommended_model(agent_num, template_type)
 st.caption(f"Recommended for this agent/template: **{recommended}** (auto-route uses this).")
 use_auto_route = st.radio("Model choice", ["Auto-route (recommended)", "Manual override"], key="run_model_choice", horizontal=True)
+stream_output = st.checkbox("Stream output (show tokens as they arrive)", value=True, key="run_stream", help="Improves perceived latency; output appears incrementally")
 if use_auto_route == "Manual override":
     model_choice = st.selectbox("Override model", list(MODEL_IDS.keys()), key="run_model_override")
     rationale = st.text_area("Rationale for override (required; logged to Decision_Log)", key="run_rationale", placeholder="e.g. Need longer context for this task")
@@ -167,8 +168,13 @@ if run_clicked:
                 "output_path": output_path,
             }
             try:
-                result = gateway.call(model_choice, messages, temperature=0.5, max_tokens=4096)
-                content = result.get("content", "")
+                if stream_output:
+                    st.caption("Streaming response...")
+                    stream = gateway.call_stream(model_choice, messages, temperature=0.5, max_tokens=4096)
+                    content = st.write_stream(stream)
+                else:
+                    result = gateway.call(model_choice, messages, temperature=0.5, max_tokens=4096)
+                    content = result.get("content", "")
             except Exception as e:
                 st.exception(e)
                 content = ""

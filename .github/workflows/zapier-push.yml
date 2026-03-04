@@ -1,0 +1,23 @@
+# Zapier Push — requires GitHub Secrets: ZAPIER_DEPLOYMENT_KEY, MAIN_ID, MAIN_APP_KEY, BASE_URL
+# Add in repo Settings → Secrets and variables → Actions
+name: Zapier Push
+
+on:
+  push:
+    branches: [Baseline, main]
+  workflow_dispatch:
+
+jobs:
+  zapier-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Zapier Push
+        uses: NourNafea/zapier-push-action@rc3.7.24
+        with:
+          zapier-deployment-key: ${{ secrets.ZAPIER_DEPLOYMENT_KEY }}
+          main-id: ${{ secrets.MAIN_ID }}
+          main-app-key: ${{ secrets.MAIN_APP_KEY }}
+          base-url: ${{ secrets.BASE_URL }}

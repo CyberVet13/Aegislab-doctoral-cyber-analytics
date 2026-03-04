@@ -105,7 +105,7 @@ User selects Agent, template type, model (auto or override), output path, option
 
 - **Path rule:** All outputs under `AEGISLAB_ROOT`; `repo_validator.allowed_output_path` and `ensure_output_dir` enforce.
 
-**n8n:** Workflow automation can trigger runs via **09_Operations/scripts/run_agent_cli.py** (Execute Command) or **09_Operations/Workflow_API** (POST /run-agent). See **09_Operations/n8n_Workflows/README.md**. Same session logs and review queue.
+**Zapier:** Workflow automation can trigger runs via **09_Operations/Workflow_API** (POST /run-agent, when exposed) or GitHub push notifications. See **09_Operations/Zapier_Workflows/README.md**. Same session logs and review queue.
 
 ---
 

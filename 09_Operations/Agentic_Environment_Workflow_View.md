@@ -17,7 +17,7 @@ flowchart TB
     subgraph Entry["Entry points"]
         Streamlit["Streamlit\n:8501"]
         Gradio["Gradio\n:7860"]
-        n8n["n8n\n:5678"]
+        Zapier["Zapier"]
         Cursor["Cursor\n(edit, rules)"]
     end
 
@@ -25,7 +25,7 @@ flowchart TB
         StreamlitApp["Streamlit_App\npages + aegislab_ui"]
         GradioApp["Gradio_App\nsame aegislab_ui"]
         CLI["run_agent_cli.py"]
-        API["Workflow_API\n:8000"]
+        API["Workflow_API\n:8002"]
         Queue[(review_queue.json)]
     end
 
@@ -67,12 +67,12 @@ flowchart TB
 
     PI --> Streamlit
     PI --> Gradio
-    PI --> n8n
+    PI --> Zapier
     PI --> Cursor
     Streamlit --> StreamlitApp
     Gradio --> GradioApp
-    n8n --> CLI
-    n8n --> API
+    Zapier --> CLI
+    Zapier --> API
     CLI --> Core
     API --> Core
     StreamlitApp --> Core
@@ -104,7 +104,7 @@ flowchart LR
     end
 
     subgraph Select["Select & run"]
-        E[Entry: Streamlit / Gradio / n8n]
+        E[Entry: Streamlit / Gradio / Zapier]
         Ag[Agent 1–11 + Template + Model]
         Call[LLM call]
     end
@@ -149,7 +149,7 @@ flowchart LR
         │
         ├──► Streamlit (localhost:8501)  ──► Dashboard | Run Agent | Review Queue | Audit | Settings
         ├──► Gradio (localhost:7860)     ──► Workflow (10_Input + Run Agent) | Review Queue | Session Logs
-        ├──► n8n (localhost:5678)         ──► Execute Command (run_agent_cli.py) or HTTP (Workflow API :8000)
+        ├──► Zapier                        ──► GitHub push notifications; Webhook → Workflow API (if exposed)
         └──► Cursor                       ──► Edit repo, rules, prompts; agents run via above UIs/CLI
 
                                         │
@@ -198,7 +198,7 @@ flowchart LR
 | 10 | Committee & Defense Simulation | Defense prep, rebuttals | 02_Agents/10_Committee_Defense_Simulation/Outputs/ |
 | 11 | Ethics, Governance & Risk | Ethics, risk register, governance | 02_Agents/11_Ethics_Governance_Risk/Outputs/ |
 
-Each agent is selected at run time (Streamlit/Gradio/n8n); one run = one agent + one template type (Daily Driver / Deep Dive / Review/QA) + one model (auto or override).
+Each agent is selected at run time (Streamlit/Gradio/Zapier/CLI); one run = one agent + one template type (Daily Driver / Deep Dive / Review/QA) + one model (auto or override).
 
 ---
 
@@ -208,9 +208,9 @@ Each agent is selected at run time (Streamlit/Gradio/n8n); one run = one agent +
 |-------|----------------|-------------|--------------|--------------|
 | **Streamlit** | http://localhost:8501 | Run Agent (load 10_Input, then run) | Review Queue (+ Refresh from disk) | Governance Audit, Settings |
 | **Gradio** | http://127.0.0.1:7860 | Workflow tab (load 10_Input, then run) | Review Queue tab | Session Logs tab, Settings |
-| **n8n** | http://localhost:5678 | Execute Command → `run_agent_cli.py` or HTTP → Workflow API | — (use Streamlit/Gradio to review) | Session_Logs/ on disk |
-| **Workflow API** | http://127.0.0.1:8000 | POST /run-agent (JSON body) | — | Same as n8n |
-| **CLI** | `python 09_Operations/scripts/run_agent_cli.py …` | Direct from shell/script | — | Same as n8n |
+| **Zapier** | zapier.com | GitHub push → notify; Webhook → Workflow API (if exposed) | — (use Streamlit/Gradio to review) | Session_Logs/ on disk |
+| **Workflow API** | http://127.0.0.1:8002 | POST /run-agent (JSON body) | — | Same as Zapier |
+| **CLI** | `python 09_Operations/scripts/run_agent_cli.py …` | Direct from shell/script | — | Same as Zapier |
 | **Cursor** | IDE | No direct run; edit 02_Agents, 10_Input, scripts | — | Edit repo only |
 
 ---
@@ -241,7 +241,8 @@ Each agent is selected at run time (Streamlit/Gradio/n8n); one run = one agent +
 | Doc | Purpose |
 |-----|---------|
 | [Environment_Architecture_View.md](../04_Praxis_Artifact/Architecture/Environment_Architecture_View.md) | Repo layers, Streamlit console, Run Agent flow, RAG, governance |
+| [BPNA_Workflow.md](BPNA_Workflow.md) | BPMN-style process model (tasks, gateways, events) |
 | [Workflow_Visual.md](Workflow_Visual.md) | 10_Input → Run Agent → Review Queue → 11_Results (Mermaid + ASCII) |
 | [Streamlit_App/README.md](Streamlit_App/README.md) | How to run Streamlit — http://localhost:8501 |
 | [Gradio_App/README.md](Gradio_App/README.md) | How to run Gradio — http://127.0.0.1:7860 |
-| [n8n_Workflows/README.md](n8n_Workflows/README.md) | n8n + CLI + Workflow API |
+| [Zapier_Workflows/README.md](Zapier_Workflows/README.md) | Zapier + Workflow API |

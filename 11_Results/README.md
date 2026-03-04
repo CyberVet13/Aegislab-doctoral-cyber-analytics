@@ -2,6 +2,12 @@
 
 **Purpose:** Place all completed deliverables here once approved. Final artifacts, committee-ready documents, and signed-off outputs live here after PI review (Review Queue: Approve).
 
+**Required formats:**
+- **Written assignments / reports:** Microsoft Word (`.docx`)
+- **Spreadsheets / data tables:** Microsoft Excel (`.xlsx`)
+
+Convert markdown or other formats to `.docx` or `.xlsx` before placing in `11_Results/` for committee or submission use.
+
 **Usage:**
 - Copy or move approved outputs from `02_Agents/*/Outputs/`, `04_Praxis_Artifact/`, or `07_Writing/` into `11_Results/` when they are ready for submission or committee use.
 - Organize by theme or submission (e.g. `11_Results/Proposal_2025/`, `11_Results/Artifact_Outputs/`).

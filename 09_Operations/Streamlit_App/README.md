@@ -1,6 +1,6 @@
 # AegisLab Streamlit UI — Operational Console
 
-- **Purpose:** Production-ready operational console for the AegisLab doctoral research environment (not a chatbot).
+- **Purpose:** Kickoff UI and operational console for the AegisLab agentic AI environment (not a chatbot).
 - **Location:** `09_Operations/Streamlit_App/`
 - **Integration:** Uses existing `02_Agents/*/Prompt_Templates.md`, `09_Operations/Session_Logs/`, `00_Governance/`; does not replace any existing structure.
 
@@ -72,7 +72,7 @@
 
 ## Structure
 
-- `app.py` — main shell.
+- `app.py` — kickoff/launcher UI (repo info, status, Run Agent, Dashboard, Review Queue).
 - `pages/` — 1_Dashboard, 2_Run_Agent, 3_Review_Queue, 4_Governance_Audit, 5_Settings_Routing.
 - `aegislab_ui/` — config, repo_validator, model_gateway, router, logging_audit, metadata, safety, templates_loader, **rag**.
 

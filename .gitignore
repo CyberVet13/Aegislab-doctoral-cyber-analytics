@@ -49,3 +49,6 @@ build/
 
 # Gradio workflow manager (local queue state)
 09_Operations/Gradio_App/review_queue.json
+
+# Cached PDF/DOCX extracted text (10_Input/.extracted/)
+10_Input/.extracted/

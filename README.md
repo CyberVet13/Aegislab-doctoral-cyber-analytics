@@ -10,13 +10,15 @@ AegisLab is a rigorous, auditable, and committee-defensible virtual research lab
 ## Quick navigation
 
 - **Document index:** [AegisLab_Index.md](AegisLab_Index.md) — Key deliverables and where to find them (governance, methodology, artifact, defense, operations).
+- **Agentic AI readiness:** [00_Governance/Agentic_AI_Readiness_Checklist.md](00_Governance/Agentic_AI_Readiness_Checklist.md) — Process, technical, organizational, and risk checklist before scaling agentic AI.
 - **Environment architecture:** [04_Praxis_Artifact/Architecture/Environment_Architecture_View.md](04_Praxis_Artifact/Architecture/Environment_Architecture_View.md) — Repo, Streamlit console, agents, LLM gateway, governance, RAG.
 - **Proposal readiness:** [08_Defense/Proposal_Defense/Proposal_Readiness_Checklist.md](08_Defense/Proposal_Defense/Proposal_Readiness_Checklist.md). **Committee:** [Research_Summary_One_Pager](08_Defense/Proposal_Defense/Research_Summary_One_Pager.md), [Submission_Package_Checklist](08_Defense/Proposal_Defense/Submission_Package_Checklist.md).
 - **First run:** [09_Operations/FIRST_RUN.md](09_Operations/FIRST_RUN.md). **Git:** [09_Operations/GETTING_STARTED_GIT.md](09_Operations/GETTING_STARTED_GIT.md) and [09_Operations/READY_FOR_GIT.md](09_Operations/READY_FOR_GIT.md).
 - **Operational console (Streamlit UI):** [09_Operations/Streamlit_App/README.md](09_Operations/Streamlit_App/README.md) — run agents, review queue, governance audit. Run from `09_Operations/Streamlit_App/` via `streamlit run app.py` or **Launch_Streamlit_UI.bat**; open **http://localhost:8501**.
 - **Workflow manager (Gradio):** [09_Operations/Gradio_App/README.md](09_Operations/Gradio_App/README.md) — manage workflow with Gradio: 10_Input → Run Agent → Review Queue. Run `python app.py` from `09_Operations/Gradio_App/` or **Launch_Gradio_UI.bat**; open **http://127.0.0.1:7860**.
-- **Workflow automation (n8n):** [09_Operations/n8n_Workflows/README.md](09_Operations/n8n_Workflows/README.md) — trigger agent runs via n8n (Manual/Schedule + CLI, or HTTP to Workflow API). Double-click **Launch_n8n.bat** in `09_Operations/n8n_Workflows/` or run `npx n8n`; open **http://localhost:5678**. See [SETUP_REFERENCE.md](09_Operations/n8n_Workflows/SETUP_REFERENCE.md); import any of the example workflow JSONs.
-- **Workflow visual:** [09_Operations/Workflow_Visual.md](09_Operations/Workflow_Visual.md) — diagram (10_Input → Run Agent → Review Queue → 11_Results); Streamlit, Gradio, n8n.
+- **Dashboard (kickoff UI):** [09_Operations/Aegislab_Dashboard/README.md](09_Operations/Aegislab_Dashboard/README.md) — Florida Gators themed UI: upload to 10_Input, auto-process, get results from 11_Results. Double-click **Launch_Dashboard.bat**.
+- **Workflow automation (Zapier):** [09_Operations/Zapier_Workflows/README.md](09_Operations/Zapier_Workflows/README.md) — GitHub push notifications, scheduled reminders, webhook-triggered agent runs. Double-click **Launch_Zapier_GitHub_Slack.bat** to open the template, or see [ZAPIER_SETUP_CHECKLIST.md](09_Operations/Zapier_Workflows/ZAPIER_SETUP_CHECKLIST.md).
+- **Workflow visual:** [09_Operations/Workflow_Visual.md](09_Operations/Workflow_Visual.md) — diagram (10_Input → Run Agent → Review Queue → 11_Results); Streamlit, Gradio, Zapier.
 - **Full agentic environment:** [09_Operations/Agentic_Environment_Workflow_View.md](09_Operations/Agentic_Environment_Workflow_View.md) — entire AI environment: all entry points, 11 agents, governance, RAG, data flow.
 
 ---
@@ -45,7 +47,7 @@ AegisLab is a rigorous, auditable, and committee-defensible virtual research lab
 | **08_Defense/** | Proposal defense, mock defenses, final defense materials |
 | **09_Operations/** | Model routing, tool configurations, session logs, decision logs |
 | **10_Input/** | Workflow staging — information to start agent runs (prompts, briefs, context) |
-| **11_Results/** | Deliverables (complete) — PI-approved outputs ready for committee or submission |
+| **11_Results/** | Deliverables (complete) — PI-approved outputs ready for committee or submission (Word `.docx`, Excel `.xlsx`) |
 | **99_Archive/** | Deprecated and historical materials |
 
 ---
@@ -81,7 +83,7 @@ Each agent has a **Role_Charter.md**, **Prompt_Templates.md** (Daily Driver, Dee
 7. **Tools:** See `09_Operations/Tool_Configurations/` for Cursor and GitHub setup.
 8. **Streamlit UI (optional):** From `09_Operations/Streamlit_App/`, run `pip install -r requirements.txt`, set `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` (e.g. in a `.env` at repo root), then run `streamlit run app.py` or double-click **Launch_Streamlit_UI.bat**. Open **http://localhost:8501** for Dashboard, Run Agent, Review Queue, and Governance Audit.
 9. **Gradio workflow manager (optional):** From `09_Operations/Gradio_App/`, run `pip install -r requirements.txt` (same API keys as above), then run `python app.py` or double-click **Launch_Gradio_UI.bat**. Open **http://127.0.0.1:7860** for Workflow (10_Input + Run Agent), Review Queue, Session Logs, and Settings. Uses the same backend (`aegislab_ui`) as Streamlit.
-10. **n8n (optional):** Install Node.js if needed, then double-click **09_Operations/n8n_Workflows/Launch_n8n.bat** or run `npx n8n`; open **http://localhost:5678**. See [n8n_Workflows/README.md](09_Operations/n8n_Workflows/README.md) and [SETUP_REFERENCE.md](09_Operations/n8n_Workflows/SETUP_REFERENCE.md). Import one of the example workflow JSONs (Manual + CLI, Manual + HTTP API, or Schedule + CLI).
+10. **Zapier (optional):** Connect AegisLab to Zapier for GitHub push notifications, scheduled reminders, or webhook-triggered agent runs. See [Zapier_Workflows/README.md](09_Operations/Zapier_Workflows/README.md) and [ZAPIER_SETUP_CHECKLIST.md](09_Operations/Zapier_Workflows/ZAPIER_SETUP_CHECKLIST.md).
 
 ---
 

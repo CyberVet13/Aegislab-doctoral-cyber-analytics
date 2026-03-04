@@ -8,7 +8,7 @@ Modifications: [PI to replace with actual results when analysis complete]
 
 # Results, Ethics, and Limitations — Draft (Report)
 
-*Placeholder for post-analysis write-up. Source: Analysis_Plan, Risk_Register, Ethical_Boundaries_Statement, Visualization_Design. Update when Figure 1 and 2 and analysis output exist.*
+*Placeholder for post-analysis write-up. Source: Analysis_Plan, Risk_Register, Ethical_Boundaries_Statement, Visualization_Design. Update when Figure 1 and 2 and analysis output exist. Generate figures per 06_Analysis/Results/Figures/Figure1_Spec.md and Figure2_Spec.md.*
 
 ---
 

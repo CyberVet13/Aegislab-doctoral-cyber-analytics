@@ -41,6 +41,19 @@ If using `.cursor/rules/` or a single project rule file, include:
 
 ---
 
+### MCP GitHub Server (Claude Chat Connector)
+Cursor uses the **GitHub MCP server** (`@modelcontextprotocol/server-github`) for repository access. Config: `~/.cursor/mcp.json`.
+
+**Setup:**
+1. Create a [GitHub Personal Access Token](https://github.com/settings/tokens) with `repo` scope.
+2. Run `.cursor/Setup_GitHub_MCP.bat` (or `setup-github-mcp.ps1`) to set `GITHUB_PERSONAL_ACCESS_TOKEN`.
+3. **Fully restart Cursor** (File → Exit, then reopen) so it picks up the token.
+4. Verify: In Cursor Agent/Composer, GitHub tools (e.g. `get_file_contents`, `search_code`) should appear.
+
+**Requires:** Node.js (for `npx`). See [Claude_GitHub_Troubleshooting.md](Claude_GitHub_Troubleshooting.md) if the connector fails.
+
+---
+
 ## GitHub Configuration
 
 ### Repository

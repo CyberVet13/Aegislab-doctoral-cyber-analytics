@@ -32,6 +32,7 @@ Modifications: [PI to confirm primary metric and sample size]
 - **Effect size:** [PI/Agent 07 to set: e.g., “medium” (d ≈ 0.5) or minimum meaningful change in [metric].]
 - **Sample size:** Compute from power analysis (e.g., G*Power, R pwr); document n, α, power, effect size. For paired t, assume moderate pre-post correlation (e.g., r = 0.5) if unknown.
 - **Feasibility:** If achievable n is below powered n, state as limitation and report CIs; avoid overclaiming null results.
+- **Methodology paragraph:** When effect size is set, add one short paragraph and table to methodology or report summarizing: target n, achieved n (if known), power, effect size, and alpha.
 
 ---
 

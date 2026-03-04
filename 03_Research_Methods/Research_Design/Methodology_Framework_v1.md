@@ -17,7 +17,7 @@ Modifications: [PI to add research questions and refine constraints]
 *Replace with your exact RQs when finalized.*
 
 - **RQ1:** Does the praxis artifact improve **detection rate** (proportion of defined security events correctly detected) compared to baseline in the target context? *Substitute another primary metric (e.g., mean time to detect) if preferred; update Metrics_Definitions and Analysis_Plan in parallel.*
-- **RQ2:** (Optional) What operational or contextual factors are associated with variation in [metric]? (exploratory; can be descriptive.)
+- **RQ2:** (Optional) What operational or contextual factors are associated with variation in [metric]? (exploratory; can be descriptive.) *RQ2 is exploratory only; not required for the primary hypothesis. Include or remove per PI decision; one sentence in methodology suffices.*
 - **Scope:** Cybersecurity analytics; single organizational or lab context unless otherwise justified.
 
 ---

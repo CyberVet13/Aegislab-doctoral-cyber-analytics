@@ -5,7 +5,7 @@ AegisLab UI — OpenAI and Anthropic API wrapper.
 """
 
 import json
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Generator, List, Optional
 
 from .config import load_env, MODEL_IDS, get_root
 
@@ -74,6 +74,90 @@ class ModelGateway:
         if provider == "openai":
             return self._call_openai(api_id, messages, system=system, temperature=temperature, max_tokens=max_tokens, seed=seed)
         return self._call_anthropic(api_id, messages, system=system, temperature=temperature, max_tokens=max_tokens)
+
+    def call_stream(
+        self,
+        model_display_name: str,
+        messages: List[Dict[str, str]],
+        *,
+        temperature: float = 0.7,
+        max_tokens: int = 4096,
+        system: Optional[str] = None,
+        seed: Optional[int] = None,
+    ) -> Generator[str, None, str]:
+        """
+        Invoke LLM with streaming. Yields content chunks. Returns full content when exhausted.
+        Use with st.write_stream() for Streamlit.
+        """
+        provider, api_id = _get_api_model_id(model_display_name)
+        if provider == "openai":
+            return self._call_openai_stream(api_id, messages, system=system, temperature=temperature, max_tokens=max_tokens, seed=seed)
+        return self._call_anthropic_stream(api_id, messages, system=system, temperature=temperature, max_tokens=max_tokens)
+
+    def _call_openai_stream(
+        self,
+        model_id: str,
+        messages: List[Dict[str, str]],
+        *,
+        system: Optional[str] = None,
+        temperature: float = 0.7,
+        max_tokens: int = 4096,
+        seed: Optional[int] = None,
+    ) -> Generator[str, None, str]:
+        import os
+        client = self._get_openai().OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+        msgs = list(messages)
+        if system:
+            msgs = [{"role": "system", "content": system}] + msgs
+        kwargs = {
+            "model": model_id,
+            "messages": msgs,
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+            "stream": True,
+        }
+        if seed is not None:
+            kwargs["seed"] = seed
+        stream = client.chat.completions.create(**kwargs)
+        content = ""
+        for chunk in stream:
+            if chunk.choices and chunk.choices[0].delta.content:
+                text = chunk.choices[0].delta.content
+                content += text
+                yield text
+        return content
+
+    def _call_anthropic_stream(
+        self,
+        model_id: str,
+        messages: List[Dict[str, str]],
+        *,
+        system: Optional[str] = None,
+        temperature: float = 0.7,
+        max_tokens: int = 4096,
+    ) -> Generator[str, None, str]:
+        import os
+        client = self._get_anthropic().Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+        sys = system or ""
+        msgs = [m for m in messages if m.get("role") != "system"]
+        for m in messages:
+            if m.get("role") == "system":
+                sys += "\n" + m.get("content", "")
+        kwargs = {
+            "model": model_id,
+            "max_tokens": max_tokens,
+            "messages": msgs,
+        }
+        if sys.strip():
+            kwargs["system"] = sys.strip()
+        if temperature is not None:
+            kwargs["temperature"] = temperature
+        content = ""
+        with client.messages.stream(**kwargs) as stream:
+            for text in stream.text_stream:
+                content += text
+                yield text
+        return content
 
     def _call_openai(
         self,

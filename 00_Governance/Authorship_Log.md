@@ -80,3 +80,14 @@ Track the authorship and contribution sources for all research artifacts, ensuri
 **Audit Date:** _____________  **PI Signature:** _________________________
 
 | artifact_cli | 11_Results/artifact_cli.md | 2026-02-11 | AI-generated draft; see session log | Pending PI review | PI review required | Draft | — |
+| brief_deliverable | 11_Results/brief_deliverable.md | 2026-02-17 | AI-generated draft; see session log | Pending PI review | PI review required | Draft | — |
+| README_deliverable | 11_Results/README_deliverable.md | 2026-02-17 | AI-generated draft; see session log | Pending PI review | PI review required | Draft | — |
+| SEAS_8499_Test_Bank_deliverable | 11_Results/SEAS_8499_Test_Bank_deliverable.md | 2026-02-17 | AI-generated draft; see session log | Pending PI review | PI review required | Draft | — |
+| brief_deliverable | 11_Results/brief_deliverable.md | 2026-02-17 | AI-generated draft; see session log | Pending PI review | PI review required | Draft | — |
+| CYBR 7240 Cyber Analytics and Intelligence Syllabus - Tagged_deliverable | 11_Results/CYBR 7240 Cyber Analytics and Intelligence Syllabus - Tagged_deliverable.md | 2026-02-17 | AI-generated draft; see session log | Pending PI review | PI review required | Draft | — |
+| README_deliverable | 11_Results/README_deliverable.md | 2026-02-17 | AI-generated draft; see session log | Pending PI review | PI review required | Draft | — |
+| SEAS_8400_Cybersecurity_Readings_deliverable | 11_Results/SEAS_8400_Cybersecurity_Readings_deliverable.md | 2026-02-17 | AI-generated draft; see session log | Pending PI review | PI review required | Draft | — |
+| SEAS_8499_Test_Bank_deliverable | 11_Results/SEAS_8499_Test_Bank_deliverable.md | 2026-02-17 | AI-generated draft; see session log | Pending PI review | PI review required | Draft | — |
+| brief_deliverable | 11_Results/brief_deliverable.md | 2026-02-21 | AI-generated draft; see session log | Pending PI review | PI review required | Draft | — |
+| README_deliverable | 11_Results/README_deliverable.md | 2026-02-21 | AI-generated draft; see session log | Pending PI review | PI review required | Draft | — |
+| SEAS_8499_Test_Bank_deliverable | 11_Results/SEAS_8499_Test_Bank_deliverable.md | 2026-02-21 | AI-generated draft; see session log | Pending PI review | PI review required | Draft | — |

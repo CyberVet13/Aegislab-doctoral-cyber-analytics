@@ -109,13 +109,52 @@ Document all significant changes to the AegisLab research environment, including
 **Impact:** Committee and submission workflow supported; index and README point to new artifacts  
 **Rollback Plan:** Revert if not needed
 
-### 2025-02-11 - OPERATIONS - n8n workflow automation (three workflows, Workflow API, SETUP_REFERENCE)
+### 2026-02-21 - GOVERNANCE - Agentic AI Readiness Checklist
 **Changed By:** PI (workflow)  
-**Affected Components:** 09_Operations/n8n_Workflows/ (README, SETUP_REFERENCE.md, AegisLab_Run_Agent_Example.json, AegisLab_Run_Agent_HTTP_Example.json, AegisLab_Run_Agent_Schedule_Example.json); 09_Operations/Workflow_API/; 09_Operations/scripts/run_agent_cli.py; 10_Input/brief.md; README, AegisLab_Index  
-**Rationale:** Enable n8n to trigger agent runs via Execute Command (CLI) or HTTP Request (Workflow API); provide repo-specific path and import steps  
-**Impact:** PI can run agents from n8n (manual, scheduled, or HTTP); same governance (session logs, review queue) applies  
-**Validation:** Workflow JSONs import in n8n; SETUP_REFERENCE contains verified repo path and command  
-**Rollback Plan:** Revert n8n_Workflows and Workflow_API commits if needed
+**Affected Components:** 00_Governance/Agentic_AI_Readiness_Checklist.md; AegisLab_Index, README  
+**Rationale:** Incorporate standard agentic AI readiness checklist (process maturity, technical readiness, organizational readiness, risk management) with AegisLab mapping  
+**Impact:** PI can assess readiness before scaling automation; supports committee defensibility  
+**Validation:** All 12 checklist items mapped to AegisLab artifacts  
+**Rollback Plan:** Revert if not needed
+
+### 2026-02-21 - OPERATIONS - Human-in-the-loop strengthenings
+**Changed By:** PI (workflow)  
+**Affected Components:** run_agent_cli.py (--confirm-defensive-scope); Workflow_API (confirm_defensive_scope); Streamlit Review Queue (checkboxes + Approve selected); Human_in_the_Loop_Map.md; Zapier_Workflows/README; Workflow_API/README; Aegislab_Dashboard/README  
+**Rationale:** Strengthen human-in-the-loop per Human_in_the_Loop_Map recommendations  
+**Impact:** (1) CLI/API require --confirm-defensive-scope when topic may involve offensive security; (2) Review Queue has checkboxes + "Approve selected" for review-before-approve; (3) Zapier and Agent 02 automation documented  
+**Validation:** Human_in_the_Loop_Map updated with implemented strengthenings  
+**Rollback Plan:** Revert commits
+
+### 2026-02-21 - OPERATIONS - Workflow bottleneck mitigations
+**Changed By:** PI (workflow)  
+**Affected Components:** 09_Operations/Workflow_API/app.py, aegislab_auto_processor.py; Streamlit_App/aegislab_ui/review_queue.py, model_gateway.py, pages/2_Run_Agent.py, pages/3_Review_Queue.py; Gradio_App/app.py; scripts/run_agent_cli.py; requirements (filelock); BPNA_Workflow_Bottleneck_Analysis.md; .gitignore (10_Input/.extracted/)  
+**Rationale:** Address bottlenecks: parallel processing, review queue contention, PI batch approve, LLM streaming, PDF/DOCX extraction cache  
+**Impact:** (1) /process-input and Auto-Processor process up to 3 files in parallel; (2) review_queue.json uses filelock; (3) Streamlit and Gradio have "Approve all"; (4) Streamlit Run Agent streams LLM output; (5) PDF/DOCX extracted text cached in 10_Input/.extracted/; pre-extract on Dashboard upload  
+**Validation:** BPNA_Workflow_Bottleneck_Analysis updated with implemented fixes  
+**Rollback Plan:** Revert commits; remove filelock from requirements if needed
+
+### 2026-02-13 - OPERATIONS - Replace n8n with Zapier workflows
+**Changed By:** PI (workflow)  
+**Affected Components:** 09_Operations/Zapier_Workflows/ (README, ZAPIER_SETUP_CHECKLIST); removal of 09_Operations/n8n_Workflows/; README, AegisLab_Index, Workflow_Visual, Agentic_Environment_Workflow_View, Environment_Architecture_View, Workflow_API, run_agent_cli, 10_Input/brief.md  
+**Rationale:** Replace n8n with Zapier for workflow automation; GitHub push notifications, scheduled reminders, webhook-triggered agent runs  
+**Impact:** PI uses Zapier (zapier.com) for GitHub→Slack, schedule reminders, and optional Workflow API webhook; same governance applies  
+**Validation:** Zapier templates and setup docs; Workflow API supports Zapier Webhooks  
+**Rollback Plan:** Revert Zapier_Workflows and n8n removal commits if needed
+
+### 2025-02-11 - OPERATIONS - n8n workflow automation (superseded by Zapier 2026-02-13)
+**Changed By:** PI (workflow)  
+**Affected Components:** 09_Operations/n8n_Workflows/ (removed); Workflow_API; run_agent_cli; 10_Input/brief.md; README, AegisLab_Index  
+**Rationale:** Previously enabled n8n; replaced with Zapier  
+**Impact:** Superseded  
+**Rollback Plan:** N/A
+
+### 2026-02-21 - GAPS - Proposal defense and human-in-the-loop gap remediations
+**Changed By:** PI (workflow)  
+**Affected Components:** Gradio_App/app.py (defensive-scope checkbox); Methodology_Framework_v1 (RQ2 sentence); Methodology_Chapter_Draft (tech justification, lab deployment, IRB template ref, citation guidance); Analysis_Plan (power paragraph note); Results_Ethics_Limitations_Draft (figure spec refs); 08_Defense/Proposal_Defense/Proposal_Defense_Slides_Template.md; 02_Agents/10_*/Outputs/Gaps_Summary.md; 07_Writing/Drafts/Abstract_Placeholder.md, Conclusion_Placeholder.md; 01_Program_Context/Learning_Outcomes/README  
+**Rationale:** Address gaps from Gap_Analysis, Human_in_the_Loop_Map, and agentic readiness  
+**Impact:** (1) Gradio has defensive-scope confirmation (parity with Streamlit); (2) methodology has tech justification, lab deployment, RQ2 guidance; (3) proposal defense slide template; (4) consolidated Gaps_Summary; (5) abstract/conclusion placeholders; (6) learning outcomes clarification  
+**Validation:** Gaps_Summary tracks remaining PI actions  
+**Rollback Plan:** Revert commits
 
 ### [YYYY-MM-DD] - [CATEGORY] - [Title]
 **Changed By:**  

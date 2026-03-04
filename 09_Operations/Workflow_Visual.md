@@ -1,6 +1,6 @@
 # AegisLab Workflow — Visual
 
-**Purpose:** End-to-end flow from input to PI-approved deliverables. Same workflow whether you use Streamlit, Gradio, or n8n/CLI.
+**Purpose:** End-to-end flow from input to PI-approved deliverables. Same workflow whether you use Streamlit, Gradio, CLI, or Zapier.
 
 **Last Updated:** 2025-02-07
 
@@ -48,7 +48,7 @@ flowchart TB
     subgraph entry["How you run the agent"]
         S[Streamlit · Run Agent]
         G[Gradio · Workflow tab]
-        N[n8n · Execute Command or HTTP]
+        Z[Zapier · Webhook or CLI]
     end
 
     subgraph agent["Run Agent (same logic)"]
@@ -75,10 +75,10 @@ flowchart TB
 
     I --> S
     I --> G
-    I --> N
+    I --> Z
     S --> L
     G --> L
-    N --> L
+    Z --> L
     L --> R --> M
     M --> A
     M --> SL
@@ -107,7 +107,7 @@ flowchart TB
   │  ENTRY POINTS (choose one)                                                     │
   │  • Streamlit (Run Agent) — Load from 10_Input → context → Run                   │
   │  • Gradio (Workflow tab) — Load from 10_Input → context → Run                   │
-  │  • n8n — Execute Command (run_agent_cli.py) or HTTP (Workflow API /run-agent)   │
+  │  • Zapier — Webhook (Workflow API) or CLI (run_agent_cli.py)                     │
   └──────────────────────────────────────┬───────────────────────────────────────┘
                                          │
                                          ▼
@@ -145,7 +145,7 @@ flowchart TB
 
 ## Where to open what
 
-| Step            | Streamlit              | Gradio                 | n8n / CLI                    |
+| Step            | Streamlit              | Gradio                 | Zapier / CLI                 |
 |-----------------|------------------------|------------------------|-----------------------------|
 | Trigger         | Run Agent → Load 10_Input | Workflow → Load 10_Input | CLI `--input 10_Input/…` or API |
 | Run             | Run Agent → Run        | Run Agent → Run        | `run_agent_cli.py` or POST /run-agent |
@@ -156,8 +156,11 @@ flowchart TB
 
 ## Links
 
+- **Human-in-the-loop:** [Human_in_the_Loop_Map.md](Human_in_the_Loop_Map.md) — Where the PI approves, confirms, or decides.
+- **BPNA workflow:** [BPNA_Workflow.md](BPNA_Workflow.md) — BPMN-style process model (tasks, gateways, events).
+- **Bottleneck analysis:** [BPNA_Workflow_Bottleneck_Analysis.md](BPNA_Workflow_Bottleneck_Analysis.md) — workflow bottlenecks and mitigations.
 - **Full agentic environment:** [Agentic_Environment_Workflow_View.md](Agentic_Environment_Workflow_View.md) — entire AI environment (all entry points, 11 agents, governance, RAG).
 - **Streamlit:** [09_Operations/Streamlit_App/README.md](Streamlit_App/README.md) — http://localhost:8501  
 - **Gradio:** [09_Operations/Gradio_App/README.md](Gradio_App/README.md) — http://127.0.0.1:7860  
-- **n8n:** [09_Operations/n8n_Workflows/README.md](n8n_Workflows/README.md)  
+- **Zapier:** [09_Operations/Zapier_Workflows/README.md](Zapier_Workflows/README.md)  
 - **Environment architecture:** [04_Praxis_Artifact/Architecture/Environment_Architecture_View.md](../04_Praxis_Artifact/Architecture/Environment_Architecture_View.md)
