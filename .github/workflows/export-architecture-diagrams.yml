@@ -4,7 +4,7 @@ name: Export Architecture Diagrams
 
 on:
   push:
-    branches: [Baseline, main]
+    branches: [Baseline, main, branch02132026]
     paths:
       - "04_Praxis_Artifact/Architecture/AegisLab_Architecture_For_Visio_Lucidchart.md"
   workflow_dispatch:
