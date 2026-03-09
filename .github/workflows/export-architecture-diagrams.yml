@@ -1,0 +1,39 @@
+# Export architecture diagrams from Mermaid to PNG/SVG
+# Runs when architecture doc changes; commits generated images
+name: Export Architecture Diagrams
+
+on:
+  push:
+    branches: [Baseline, main]
+    paths:
+      - "04_Praxis_Artifact/Architecture/AegisLab_Architecture_For_Visio_Lucidchart.md"
+  workflow_dispatch:
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Export diagrams
+        run: python 09_Operations/scripts/export_architecture_diagram.py
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add 04_Praxis_Artifact/Architecture/diagrams/
+          if git diff --staged --quiet; then
+            echo "No diagram changes"
+          else
+            git commit -m "chore: regenerate architecture diagrams"
+            git push
+          fi
